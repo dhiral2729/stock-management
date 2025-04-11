@@ -1,0 +1,68 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa; /* Light background */
+    color: #333; /* Darker text for readability */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #ffffff; /* Light Sidebar */
+    border-right: 1px solid #ddd; /* Subtle border */
+    padding: 15px;
+}
+
+.sidebar a {
+    color: #333;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.sidebar a:hover {
+    background: gray; /* Soft hover */
+}
+
+/* Header */
+.header {
+    background: #ffffff; /* Light header */
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+}
+
+/* Cards */
+.card {
+    background: #ffffff; /* Light background */
+    border: 1px solid #ddd; /* Subtle border */
+    text-align: center;
+    border-radius: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #343a40;
+    color: white;
+    text-align: center;
+    font-size: 10px; /* Smaller text */
+    padding: 3px 0;  /* Less padding */
+    height: 20px; /* Set a small height */
+    line-height: 20px; /* Align text properly */
+}
+

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stock Management</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+      color: #333;
+    }
+
+    .layout {
+      display: flex;
+    }
+
+    .content {
+      flex: 1;
+      padding: 30px;
+      background-color: #fff;
+      min-height: 100vh;
+    }
+
+    .header-row {
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      color: #1e1e2f;
+    }
+
+    .form-section {
+      margin-bottom: 40px;
+      background: #fdfdfd;
+      padding: 20px;
+      border: 1px solid #e1e1e1;
+      border-radius: 10px;
+    }
+    #form-title{
+ 
+      left: 11px;
+    }
+    form {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      align-items: baseline;
+    
+}
+        
+
+    select, input[type="number"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      min-width: 180px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #357abd;
+    }
+
+    button.danger {
+      background-color: #e74c3c;
+    }
+
+    button.danger:hover {
+      background-color: #c0392b;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      left: 17%;
+      width: 1175px;
+      border: 1px solid #e1e1e1;
+      position: relative;
+      right: -601px;
+    
+    }
+    .header-row{
+     
+      position: relative;
+      right: -601px;
+  
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f0f0f0;
+      color: #333;
+    }
+
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    .empty-message {
+      text-align: center;
+      padding: 20px;
+      color: #999;
+      font-style: italic;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      background-color: #f0f0f0;
+      margin-top: 30px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/header') %>
+  <div class="layout">
+    <%- include('partials/sidebar') %>
+    <main class="content">
+      <div class="header-row">
+        <h2 id="form-title" >Add Stock</h2>
+      </div>
+
+      <div class="form-section">
+        <form id="stock-form" action="/admin/stocks/add" method="POST">
+          <select name="product" id="product" required>
+            <option value="">Select Product</option>
+            <% if (products && products.length > 0) { %>
+              <% products.forEach(product => { %>
+                <option value="<%= product._id %>"><%= product.productName %></option>
+              <% }) %>
+            <% } %>
+          </select>
+          <input type="number" name="quantity" id="quantity" placeholder="Quantity" required />
+          <input type="hidden" name="_method" id="method-field" value="POST" />
+          <button type="submit" id="submit-btn">Add Stock</button>
+          <button type="button" id="cancel-btn" onclick="resetForm()" style="display: none;">Cancel</button>
+        </form>
+      </div>
+
+      <div class="header-row">
+        <h2>Stock List</h2>
+      </div>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Sr.No</th>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (stocks && stocks.length > 0) { %>
+              <% stocks.forEach((stock, index) => { %>
+                <tr>
+                  <td><%= index + 1 %></td>
+                  <td><%= stock.product?.productName || 'N/A' %></td>
+                  <td><%= stock.quantity %></td>
+                  <td><%= stock.createdAt.toDateString() %></td>
+                  <td>
+                    <button onclick="editStock('<%= stock._id %>', '<%= stock.product._id %>', '<%= stock.quantity %>')">Edit</button>
+                    <form action="/admin/stocks/delete/<%= stock._id %>" method="POST" style="display:inline;">
+                      <button type="submit" class="danger">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+                
+              <% }) %>
+            <% } else { %>
+              <tr><td colspan="5" class="empty-message">No stock records found</td></tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function editStock(id, productId, quantity) {
+      document.getElementById("product").value = productId;
+      document.getElementById("quantity").value = quantity;
+      document.getElementById("stock-form").action = `/admin/stocks/update/${id}`;
+      document.getElementById("submit-btn").textContent = "Update Stock";
+      document.getElementById("cancel-btn").style.display = "inline-block";
+      document.getElementById("form-title").textContent = "Update Stock";
+    }
+
+    function resetForm() {
+      const form = document.getElementById("stock-form");
+      form.reset();
+      form.action = "/admin/stocks/add";
+      document.getElementById("submit-btn").textContent = "Add Stock";
+      document.getElementById("cancel-btn").style.display = "none";
+      document.getElementById("form-title").textContent = "Add Stock";
+    }
+  </script>
+
+  <%- include('partials/footer') %>
+</body>
+</html>

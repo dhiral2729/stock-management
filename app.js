@@ -1,0 +1,33 @@
+const express=require("express")
+const cookieParser = require('cookie-parser');
+const methodOverride = require('method-override');
+const bodyParser = require("body-parser");
+const path = require("path");
+const cors = require('cors');
+const dotenv = require("dotenv");
+const mongoose=require("mongoose")
+require('dotenv').config();
+const app=express()
+const port=4000
+const{ connectTomongodb}=require("./config/connection")
+connectTomongodb()
+app.use(express.json())
+app.use(cookieParser());
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: false }));
+const userroute=require('./routes/user')
+const categoryroutes=require("./routes/category")
+const adminroutes=require("./routes/admin")
+const productroutes=require("./routes/product")
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(methodOverride('_method'));
+const stockRoutes = require('./routes/stock');
+
+app.use("/",userroute);
+app.use("/admin",categoryroutes);
+app.use("/admin",adminroutes);
+app.use("/admin",productroutes);
+app.use('/admin', stockRoutes);
+app.listen(port,console.log("http://localhost:4000"))
