@@ -107,3 +107,26 @@ exports.deleteProducts = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
+exports.productList=async (req, res) => {
+    
+      try {
+        const categories = await Category.find({});
+        const products = await Product.find().populate('category')
+          
+        let token = req.cookies.token;
+        if (!token) {
+          return res.redirect('/login');
+        }
+    
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+        return res.render('product', {
+          categories,
+          products,
+          token: decoded,
+        });
+      } catch (err) {
+        console.error("Error in /admin/product:", err.message);
+        return res.status(401).redirect('/login');
+      }
+};
