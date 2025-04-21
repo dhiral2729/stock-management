@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
+      enum: ['admin', 'user'],
       default: 'user',
     },
     isApproved: { type: Boolean, default: false }
@@ -26,5 +27,5 @@ const userSchema = new mongoose.Schema(
   }
 );
 //model
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model('User', userSchema);
 module.exports = User;

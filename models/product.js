@@ -8,7 +8,7 @@ const productSchema=new mongoose.Schema({
   },
   category:{
     type:mongoose.Schema.Types.ObjectId,
-    ref:'Category',
+    ref:"Category",
     required:true
   },
   price:{
@@ -19,5 +19,5 @@ const productSchema=new mongoose.Schema({
 
   }
 })
-const Product=mongoose.model("Product",productSchema)
+const Product = mongoose.models.Product || mongoose.model("Product", productSchema);
 module.exports=Product

@@ -1,9 +1,14 @@
 const { default: bcrypt } = require('bcryptjs');
 const User=require("../models/user")
+const Purchase = require('../models/purchase');
+const jwt=require("jsonwebtoken")
 const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({}); 
-        res.render('adminusers', { users }); 
+      
+        const users = await User.find({role:{$ne:'admin'}}); 
+        let token = req.cookies.token;
+        token = jwt.verify(token,process.env.JWT_SECRET)
+        res.render('adminusers', { users ,token}); 
     } catch (error) {
         console.error(error);
         res.status(500).send('Server Error');
@@ -36,7 +41,7 @@ const updateUsers = async (req, res) => {
   };
 const editForm=async (req,res)=>{
   const user=await User.findById(req.params.id)
-  // console.log(user);
+
   
   res.render("adminusers",{user})
 }  
@@ -68,4 +73,25 @@ exports.adduser= async (req, res) => {
     res.render('adminusers', { error: 'Error adding category' });
   }
 };
-module.exports = { getAllUsers ,updateUsers,editForm,deleteUser};
+const handleReport=async(req,res)=>{
+  try{
+    const token=req.cookies.token
+    const decoded=jwt.verify(token,process.env.JWT_SECRET)
+    const allPurchase=await Purchase.find({})
+    .populate('product')
+    .populate('buyer')
+     .sort({ purchasedAt: -1 })
+    .lean()
+    return res.render("adminreport",{
+      purchases:allPurchase,
+      token:decoded,
+      username:decoded.name
+
+    })
+  }
+  catch(err){
+    console.log(err);
+    
+  }
+}
+module.exports = { getAllUsers ,updateUsers,editForm,deleteUser,handleReport};

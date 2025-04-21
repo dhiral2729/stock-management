@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>User Purchase Report</title>
+    <style>
+      body {
+        font-family: 'Segoe UI';
+        margin: 0;
+        padding: 0;
+        background-color: #f4f6f8;
+      }
+
+      .d-flex {
+        display: flex;
+      }
+
+      .main-content {
+        flex: 1;
+        padding: 40px;
+        position: relative;
+        left: 220px;
+      }
+
+      .header-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      h2 {
+        color: #333;
+        font-size: 24px;
+        margin: 0;
+      }
+
+      table {
+        width: 1100px;
+        border-collapse: collapse;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      th,
+      td {
+        padding: 15px 20px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #000000;
+        color: white;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      tr:hover {
+        background-color: #e7f1ff;
+      }
+
+      td[data-label] {
+        position: relative;
+      }
+
+      /* Responsive Table */
+      @media (max-width: 768px) {
+        table,
+        thead,
+        tbody,
+        th,
+        td,
+        tr {
+          display: block;
+        }
+
+        thead {
+          display: none;
+        }
+
+        td {
+          padding-left: 50%;
+          position: relative;
+          text-align: right;
+        }
+
+        td::before {
+          content: attr(data-label);
+          position: absolute;
+          left: 20px;
+          width: 45%;
+          padding-right: 10px;
+          white-space: nowrap;
+          font-weight: bold;
+          color: #555;
+        }
+
+        .main-content {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+  
+    <%- include('partials/header') %>
+    <div class="header-wrapper  ">
+      <h2>User Purchase Report</h2>
+    </div>
+    <div class="d-flex header-wrapper">
+      <%- include('partials/sidebar') %>
+
+      <div class="main-content" style="display: flex">
+     
+        <table>
+          <thead>
+     
+    
+            <tr>
+              <th>User</th>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Total Price</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% purchases.forEach(purchase => { %>
+              <tr>
+                <td data-label="User"><%= purchase.buyer ? purchase.buyer.name : 'Unknown' %></td>
+                <td data-label="Product"><%= purchase.product ? purchase.product.productName : 'Unknown' %></td>
+                <td data-label="Quantity"><%= purchase.quantity %></td>
+                <td data-label="Total Price">₹<%= purchase.price %></td>
+                <td data-label="Date"><%= new Date(purchase.purchasedAt).toLocaleString() %></td>
+              </tr>
+              
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>

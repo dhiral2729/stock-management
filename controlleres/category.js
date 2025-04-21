@@ -1,12 +1,14 @@
 const Category = require('../models/category');
-
+const jwt = require("jsonwebtoken")
 exports.getCategory = async (req, res) => {
   try {
     const categories = await Category.find();
-    res.render('category', { error: null, categories });
+      let token = req.cookies.token;
+      token = jwt.verify(token,process.env.JWT_SECRET)
+    res.render('category', { error: null, categories , token});
   } catch (err) {
     res.render('category', {
-      error: 'Failed to load categories!',
+      error: 'Failed to load categories!',  
       categories: [],
     });
   }
@@ -15,13 +17,15 @@ exports.getCategory = async (req, res) => {
 exports.addCategory = async (req, res) => {
   try {
     const { name, id} = req.body;
-
+    const categories = await Category.find();
     const existingCategory = await Category.findOne({ name });
     if (existingCategory) {
-      return res.render('category', { error: 'Category already exists' });
+      let token = req.cookies.token;
+      token = jwt.verify(token,process.env.JWT_SECRET)
+      return res.render('category',{ error: 'Category already exists' ,token,categories});
     }
     if(id){
-      // update qurey
+     
     }else{
       const newCategory = new Category({ name });
         await newCategory.save();

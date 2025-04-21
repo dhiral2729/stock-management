@@ -1,23 +1,38 @@
 const Product = require('../models/product');
+const Category=require("../models/category")
 const mongoose = require('mongoose');
-
+const jwt = require('jsonwebtoken');
 
 exports.createProduct = async (req, res) => {
   try {
     const { productName, category, price } = req.body;
     const isBestSeller = req.body.isBestSeller === 'on';
-    if (!productName || !category || !price   ) {
+    if (!productName || !category || !price) {
       return res.status(400).send('All fields are required');
     }
 
     if (!mongoose.Types.ObjectId.isValid(category)) {
       return res.status(400).send('Invalid category ID');
     }
-
-    const newProduct = new Product({ productName, category, price, isBestSeller });
+    const existingProduct = await Product.findOne({ productName, category });
+    if (existingProduct) {
+      const categories = await Category.find();
+      const products = await Product.find().populate('category');
+      
+      return res.render('product', {
+        categories,
+        products,
+        token: req.user || {},
+        error: 'Product already exists'
+      });
+    }
+    const newProduct = new Product({
+      productName,
+      category,
+      price,
+      isBestSeller,
+    });
     await newProduct.save();
-   
-    
 
     res.redirect('/admin/product');
   } catch (error) {
@@ -26,17 +41,19 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-// Get All Products
 exports.getAllProduct = async (req, res) => {
   try {
-    const products = await Product.find().populate('category'); 
-    res.render('products', { products });
-  } catch (err) {
+    const products = await Product.find().populate('category');
+    let token = req.cookies.token;
+    token = jwt.verify(token, process.env.JWT_SECRET);
+    res.render('product', { products, token  });
+    }
+   
+  catch (err) {
     console.error(err);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
-
 
 exports.getProductById = async (req, res) => {
   try {
@@ -45,37 +62,39 @@ exports.getProductById = async (req, res) => {
       return res.status(404).send('Product not found');
     }
 
-    
-    res.render('product', { product }); 
+    let token = req.cookies.token;
+    token = jwt.verify(token, process.env.JWT_SECRET);
+    res.render('product', { product, token });
   } catch (error) {
     res.status(500).send('Internal Server Error');
   }
 };
-// Update Product
 exports.updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const updatedProduct = await Product.findByIdAndUpdate(id, {
-      productName: req.body.productName,
-      price: req.body.price,
-      category: req.body.category,
-      isBestSeller: req.body.isBestSeller === 'on',
-    }, {
-      new: true,
-    });
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      {
+        productName: req.body.productName,
+        price: req.body.price,
+        category: req.body.category,
+        isBestSeller: req.body.isBestSeller === 'on',
+      },
+      {
+        new: true,
+      }
+    );
 
     if (!updatedProduct) {
       return res.status(404).send('Product not found');
     }
-    return res.redirect('/admin/product'); 
+    return res.redirect('/admin/product');
   } catch (error) {
     console.error(error);
     res.status(400).send('Failed to update product');
   }
 };
 
-
-// Delete Product
 exports.deleteProducts = async (req, res) => {
   try {
     const deletedProduct = await Product.findByIdAndDelete(req.params.id);
@@ -83,10 +102,8 @@ exports.deleteProducts = async (req, res) => {
       return res.status(404).send('Product not found');
     }
 
-    // Redirect after delete
     res.redirect('/admin/product');
   } catch (error) {
     res.status(500).send('Internal Server Error');
   }
 };
-

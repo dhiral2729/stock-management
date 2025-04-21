@@ -169,6 +169,7 @@
     <div class="layout">
       <%- include('partials/sidebar') %>
 
+  
       <main class="content">
         <div class="header-row">
           <h2><span id="form-title">Add New Product</span></h2>
@@ -221,26 +222,29 @@
                     <td><%= product.isBestSeller ? "Yes" : "No" %></td>
                     <td>
                       <button onclick="editProduct('<%= product._id %>', '<%= product.productName %>', '<%= product.price %>', '<%= product.category ? product.category._id : {} %>', '<%= product.isBestSeller %>')">Edit</button>
-                      <form action="/admin/products/<%= product._id %>" method="POST" style="display:inline;">
+                      <form action="/admin/products/<%= product._id %>" method="POST"  onsubmit="return confirm('Delete this product?');"
+                        style="display:inline;">
                         <button type="submit" class="danger">Delete</button>  
                       </form>
                     </td>
                   </tr>
+                
+  
+                  
                 <% }) %>
               <% } else { %>
                 <tr>
                   <td colspan="6" class="empty-message">No products available</td>
                 </tr>
               <% } %>
+              
             </tbody>
           </table>
         </div>
       </main>
     </div>
 
-    <!-- <footer>
-      &copy; 2025 Stock Manager. All rights reserved.
-    </footer> -->
+   
 
     <script>
       function editProduct(id, name, price, categoryId, isBestSeller) {

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Purchase History</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <%- include('partials/header') %>
+     <%- include('partials/usersidebar') %>
+
+    <div class="container" style="margin-left: 268px">
+        <!-- <h2><%= username %>'s Purchase History</h2>
+        <h2><%= token.name %></h2> -->
+
+
+      <% if (purchases.length === 0) { %>
+      <p>No purchases found.</p>
+      <% } else { %>
+      <table class="table" >
+        <thead>
+          <tr>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+            <th>Date</th>
+            <th>Buyer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% purchases.forEach( purchase=> { %>
+          <tr>
+            <td><%= purchase.product.productName %></td>
+            <td><%= purchase.quantity %></td>
+            <td>₹<%= purchase.price %></td>
+            <td><%= new Date(purchase.purchasedAt).toLocaleString() %></td>
+            <td>₹<%= purchase.buyer.name %></td>
+
+          </tr>
+
+          <% }) %>
+        </tbody>
+      </table>
+      <% } %>
+    </div>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>

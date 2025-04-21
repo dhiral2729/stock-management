@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Buy Product</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+    <%- include('partials/header') %>
+  <%- include('partials/usersidebar') %>
+<div class="container" style="    position: relative; left: 177px;">
+    
+    <div class="container mt-5">
+      <h2>Buy Product</h2>
+      <table class="table">
+        <tr><th>Product Name</th><td><%= product.productName %></td></tr>
+        <tr><th>Price</th><td><%= product.price %></td></tr>
+        <tr>
+            <th>Added By</th>
+            <td><%= stock.addedBy %></td>
+
+          </tr>
+        <tr><th>Category</th><td><%= product.category.name %></td></tr>
+    </tr>
+    <tr><th>Available QTY.</th><td><%= stock.quantity %></td></tr>
+
+
+      </table>
+  
+      <form action="/user/buy/<%= product._id %>" method="POST">
+        <div class="form-group">
+          <label for="quantity">Quantity:</label>
+          <input type="number" class="form-control" name="quantity" min="1" max="<%= stock.quantity%>"/>
+    
+        </div>
+        <button type="submit" class="btn btn-success mt-3">Confirm Purchase</button>
+      </form>
+    </div>
+</div>
+
+  <%- include('partials/footer') %>
+</body>
+
+
+</html>
