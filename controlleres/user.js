@@ -6,7 +6,6 @@ const {
   createTokenForUser,
 } = require('../services/authentication');
 
-// SIGNUP
 const handlesignup = async (req, res) => {
   try {
     const { name, email, password, confirm_password } = req.body;
@@ -54,7 +53,7 @@ const loadHome = (req, res) => {
     return res.redirect('/login');
   }
 };
-// LOGIN
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   const admin = await User.findOne({ email });
@@ -80,7 +79,7 @@ const login = async (req, res) => {
       });
     }
 
-    const token = createTokenForUser(email, password,user.name);
+    const token = createTokenForUser(email, password, user.name);
     // console.log(token)
     res.cookie('token', token);
     return res.redirect('/user/dashboard');
@@ -92,13 +91,13 @@ const login = async (req, res) => {
     });
   }
 };
-// LOGOUT
+
 const logout = (req, res) => {
   try {
     res.clearCookie('token');
     res.redirect('/login');
   } catch (error) {
-    res.status(500).json({ message: 'Logout failed: '});
+    res.status(500).json({ message: 'Logout failed: ' });
   }
 };
 
@@ -106,5 +105,5 @@ module.exports = {
   handlesignup,
   login,
   logout,
-  loadHome
+  loadHome,
 };
