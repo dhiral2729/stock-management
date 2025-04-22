@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
-const MongoUrl = process.env.MONGO_URI;
 
-const connectTomongodb = async (url) => {
-  mongoose
-    .connect(MongoUrl)
-    .then(() => console.log('mongo connected:'))
-    .catch((err) => {
-      console.log(err);
-    });
+const connectTomongodb = async () => {
+  const mongoUrl = process.env.MONGO_URI;
+  if (!mongoUrl) throw new Error('MONGODB_URI not set');
+  await mongoose.connect(mongoUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  console.log('MongoDB connected');
 };
+
 module.exports = {
   connectTomongodb,
 };
