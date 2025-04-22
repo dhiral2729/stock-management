@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Purchase History</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <style>
+      .content-container {
+        margin-left: 250px;
+        padding: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/header') %> 
+    <%- include('partials/sidebar') %> 
+
+    <div class="content-container">
+      <h2 class="mb-4 text-center">User Purchase History</h2>
+
+      <!-- Product Summary -->
+      <div class="mb-5">
+        <h4> Product Summary</h4>
+        <ul class="list-group">
+          <% summary.forEach(item => { %>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <strong><%= item.productName %></strong>
+              <span>
+                Total Stock: <%= item.totalStock %> |
+                Purchased: <%= item.purchasedQuantity %> |
+                Remaining: <%= item.totalStock - item.purchasedQuantity %>
+              </span>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+
+      <!-- Purchase Table -->
+      <div>
+        <table class="table table-bordered table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>Sr No.</th>
+              <th>Username</th>
+              <th>Purchase Date</th>
+              <th>Product Name</th>
+              <th>Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (purchases.length > 0) { %>
+              <% purchases.forEach((item, index) => { %>
+                <tr>
+                  <td><%= index + 1 %></td>
+                  <td><%= item.buyer?.name || 'Unknown User' %></td>
+                  <td><%= new Date(item.purchasedAt).toLocaleString() %></td>
+                  <td><%= item.product?.productName || 'Unknown Product' %></td>
+                  <td><%= item.quantity %></td>
+                </tr>
+              <% }) %>
+            <% } else { %>
+              <tr>
+                <td colspan="5" class="text-center">No purchase records found.</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <%- include('partials/footer') %>
+  </body>
+</html>

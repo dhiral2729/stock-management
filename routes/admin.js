@@ -5,5 +5,7 @@ router.get('/users', admincontroller.getAllUsers);
 router.get('/update/:id', admincontroller.editForm);
 router.post('/users/:id', admincontroller.deleteUser);
 router.get('/report', admincontroller.handleReport);
+router.get("/history", admincontroller.purchaseHistory);
+
 
 module.exports = router;

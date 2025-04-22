@@ -8,8 +8,6 @@ const connectTomongodb = async (url) => {
       console.log(err);
     });
 };
-
-
 module.exports = {
   connectTomongodb,
 };

@@ -1,11 +1,11 @@
-const express=require("express")
+const express = require("express")
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
 const bodyParser = require("body-parser");
 const path = require("path");
-const cors = require('cors');
-const dotenv = require("dotenv");
-const mongoose=require("mongoose")
+// const cors = require('cors');
+// const dotenv = require("dotenv");
+// const mongoose=require("mongoose")
 require('dotenv').config();
 const app=express()
 const port=4000
@@ -17,7 +17,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
-const userroute=require('./routes/user')
+const userroute= require('./routes/user')
 const categoryroutes=require("./routes/category")
 const adminroutes=require("./routes/admin")
 const productroutes=require("./routes/product")

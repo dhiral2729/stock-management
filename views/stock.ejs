@@ -232,7 +232,7 @@
                     action="/admin/stocks/delete/<%= stock._id %>"
                     method="POST"
                     onsubmit="return confirm('Delete this stock?');"
-                        style="display:inline;"
+                    style="display: inline"
                     style="display: inline"
                   >
                     <button type="submit" class="danger">Delete</button>
@@ -249,14 +249,19 @@
                 </td>
               </tr>
               <% } %>
+              <div style="margin-top: 20px">
+                <form action="/admin/history" method="GET">
+                  <button type="submit" class="btn btn-success">
+                    View Users Purchase History
+                  </button>
+                </form>
+              </div>
             </tbody>
           </table>
-   
-
         </div>
       </main>
     </div>
-   
+
     <script>
       function editStock(id, productId, quantity, price) {
         document.getElementById('product').value = productId;
