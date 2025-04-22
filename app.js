@@ -31,4 +31,5 @@ app.use("/admin",adminroutes);
 app.use("/admin",productroutes);
 app.use('/admin', stockRoutes);
 app.use("/user",userDashboard);
-app.listen(port,console.log("http://localhost:4000"))
+
+// app.listen(port,console.log("http://localhost:4000"))
