@@ -3,9 +3,6 @@ const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
 const bodyParser = require("body-parser");
 const path = require("path");
-// const cors = require('cors');
-// const dotenv = require("dotenv");
-// const mongoose=require("mongoose")
 require('dotenv').config();
 const app=express()
 const port=4000

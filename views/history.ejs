@@ -4,28 +4,67 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Purchase History</title>
+
     <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     />
     <style>
+      body {
+        background-color: #f8f9fa;
+      }
+
       .content-container {
         margin-left: 250px;
         padding: 30px;
+        min-height: 100vh;
+      }
+
+      .summary-card {
+        background-color: #ffffff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+      }
+
+      .summary-card h4 {
+        margin-bottom: 20px;
+      }
+
+      .list-group-item {
+        border: none;
+        border-bottom: 1px solid #dee2e6;
+        background-color: transparent;
+        font-size: 16px;
+      }
+
+      .table {
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .table thead {
+        background-color: #343a40;
+        color: white;
+      }
+
+      .table-hover tbody tr:hover {
+        background-color: #f1f1f1;
       }
     </style>
   </head>
   <body>
-    <%- include('partials/header') %> 
-    <%- include('partials/sidebar') %> 
-
+    <%- include('partials/header') %>
+    <%- include('partials/sidebar') %>
     <div class="content-container">
       <h2 class="mb-4 text-center">User Purchase History</h2>
 
       <!-- Product Summary -->
-      <div class="mb-5">
-        <h4> Product Summary</h4>
+      <div class="summary-card">
+        <h4>Product Summary</h4>
         <ul class="list-group">
           <% summary.forEach(item => { %>
             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -40,10 +79,10 @@
         </ul>
       </div>
 
-      <!-- Purchase Table -->
-      <div>
+      <!-- Purchase History Table -->
+      <div class="table-responsive">
         <table class="table table-bordered table-hover">
-          <thead class="table-light">
+          <thead class="table-dark">
             <tr>
               <th>Sr No.</th>
               <th>Username</th>

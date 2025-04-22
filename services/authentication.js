@@ -35,9 +35,12 @@ function validatetoken(adminToken ) {
   
   return payload;
 }
+
+
 module.exports = {
   createTokenForUser,
   createTokenForAdmin,
   validatetoken,
-  validatetokenForUser
+  validatetokenForUser,
+  
 };

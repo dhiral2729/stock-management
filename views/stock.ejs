@@ -3,136 +3,143 @@
   <head>
     <meta charset="UTF-8" />
     <title>Stock Management</title>
-    <style>
-      body {
-        margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        background-color: #f4f6f8;
-        color: #333;
-      }
+   <style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+    max-width: 100%;
+    overflow-x: hidden; /* prevent unwanted horizontal scroll */
+  }
 
-      .layout {
-        display: flex;
-      }
+  .layout {
+    display: flex;
+    min-height: 100vh;
+    overflow: hidden;
+  }
 
-      .content {
-        flex: 1;
-        padding: 30px;
-        background-color: #fff;
-        min-height: 100vh;
-      }
+  .content {
+    flex: 1;
+    padding: 30px;
+    background-color: #fff;
+  }
 
-      .header-row {
-        margin-bottom: 20px;
-      }
+  .header-row {
+    margin-bottom: 20px;
+  }
 
-      h2 {
-        margin: 0;
-        font-size: 24px;
-        color: #1e1e2f;
-      }
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #1e1e2f;
+  }
 
-      .form-section {
-        margin-bottom: 40px;
-        background: #fdfdfd;
-        padding: 20px;
-        border: 1px solid #e1e1e1;
-        border-radius: 10px;
-      }
-      #form-title {
-        left: 11px;
-      }
-      form {
-        display: flex;
-        gap: 15px;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        align-items: baseline;
-      }
+  .form-section {
+    position: relative;
+    left: 256px;
+    width: 80%;
+    margin-bottom: 40px;
+    background: #fdfdfd;
+    padding: 20px;
+    border: 1px solid #e1e1e1;
+    border-radius: 10px;
+  }
 
-      select,
-      input[type='number'] {
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        min-width: 180px;
-      }
+  form {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+  }
 
-      button {
-        padding: 10px 20px;
-        background-color: #4a90e2;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background 0.3s;
-      }
+  select,
+  input[type='number'] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    min-width: 180px;
+    flex: 1 1 auto;
+  }
 
-      button:hover {
-        background-color: #357abd;
-      }
+  button {
+    padding: 10px 20px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
 
-      button.danger {
-        background-color: #e74c3c;
-      }
+  button:hover {
+    background-color: #357abd;
+  }
 
-      button.danger:hover {
-        background-color: #c0392b;
-      }
+  button.danger {
+    background-color: #e74c3c;
+  }
 
-      .card {
-        background-color: white;
-        border-radius: 10px;
-        padding: 20px;
-        left: 17%;
-        width: 1175px;
-        border: 1px solid #e1e1e1;
-        position: relative;
-        right: -601px;
-      }
-      .header-row {
-        position: relative;
-        right: -601px;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 15px;
-      }
+  button.danger:hover {
+    background-color: #c0392b;
+  }
 
-      th,
-      td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-      }
+  .card {
+    position: relative;
+    left: 256px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #e1e1e1;
+    width: 80%; /* make it responsive */
+    overflow-x: auto; /* allow table scroll if content is too wide */
+  }
 
-      th {
-        background-color: #f0f0f0;
-        color: #333;
-      }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    min-width: 800px; /* to keep table readable on small screens */
+  }
 
-      tr:hover {
-        background-color: #f9f9f9;
-      }
+  th,
+  td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
 
-      .empty-message {
-        text-align: center;
-        padding: 20px;
-        color: #999;
-        font-style: italic;
-      }
+  th {
+    background-color: #f0f0f0;
+    color: #333;
+  }
 
-      footer {
-        text-align: center;
-        padding: 15px;
-        font-size: 14px;
-        background-color: #f0f0f0;
-        margin-top: 30px;
-        color: #666;
-      }
-    </style>
+  tr:hover {
+    background-color: #f9f9f9;
+  }
+
+  .empty-message {
+    text-align: center;
+    padding: 20px;
+    color: #999;
+    font-style: italic;
+  }
+.header-row{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+  footer {
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+    background-color: #f0f0f0;
+    margin-top: 30px;
+    color: #666;
+  }
+</style>
+
   </head>
   <body>
     <%- include('partials/header') %>
@@ -196,67 +203,63 @@
 
         <div class="card">
           <table>
-            <thead>
-              <tr>
-                <th>Sr.No</th>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Date</th>
-                <th>Actions</th>
-                <th>Added By</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% if (stocks && stocks.length > 0) { %> <% stocks.forEach((stock,
-              index) => { %>
-              <tr>
-                <td><%= index + 1 %></td>
-                <td><%= stock.product?.productName || 'N/A' %></td>
+           <thead>
+  <tr>
+    <th>Sr.No</th>
+    <th>Product</th>
+    <th>Quantity</th>
+    <th>Date</th>
+    <th>Added By</th>
+    <th>Price</th>
+    <th>History</th>
+    <th>Actions</th> 
+  </tr>
+</thead>
+<tbody>
+  <% if (stocks && stocks.length > 0) { %>
+    <% stocks.forEach((stock, index) => { %>
+      <tr>
+        <td><%= index + 1 %></td>
+        <td><%= stock.product?.productName || 'N/A' %></td>
+        <td><%= stock.quantity %></td>
+        <td><%= stock.createdAt.toDateString() %></td>
+        <td><%= stock.addedBy || 'N/A' %></td>
+        <td>₹<%= stock.price || '0.00' %></td>
+        <td>
+          <form action="/admin/history/<%= stock.product?._id %>" method="GET">
+            <button type="submit" class="btn btn-success">View</button>
+          </form>
+        </td>
+        <td>
+          <% if (stock.product) { %>
+            <button
+              onclick="editStock('<%= stock._id %>', '<%= stock.product._id %>', '<%= stock.quantity %>', '<%= stock.price %>')"
+            >
+              Edit
+            </button>
+          <% } else { %>
+            <span>Product not available</span>
+          <% } %>
 
-                <td><%= stock.quantity %></td>
+          <form
+            action="/admin/stocks/delete/<%= stock._id %>"
+            method="POST"
+            onsubmit="return confirm('Delete this stock?');"
+            style="display: inline"
+          >
+            <button type="submit" class="danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  <% } else { %>
+    <tr>
+      <td colspan="8" class="empty-message">No stock records found</td>
+    </tr>
+  <% } %>
+</tbody>
 
-                <td><%= stock.createdAt.toDateString() %></td>
-                <td>
-                  <% if (stock.product) { %>
-                  <button
-                    onclick="editStock('<%= stock._id %>', '<%= stock.product._id %>', '<%= stock.quantity %>', '<%= stock.price %>')"
-                  >
-                    Edit
-                  </button>
-                  <% } else { %>
-                  <span>Product not available</span>
-                  <% } %>
 
-                  <form
-                    action="/admin/stocks/delete/<%= stock._id %>"
-                    method="POST"
-                    onsubmit="return confirm('Delete this stock?');"
-                    style="display: inline"
-                    style="display: inline"
-                  >
-                    <button type="submit" class="danger">Delete</button>
-                  </form>
-                </td>
-                <td><%= stock.addedBy || 'N/A' %></td>
-                <td>₹<%= stock.price || '0.00' %></td>
-              </tr>
-
-              <% }) %> <% } else { %>
-              <tr>
-                <td colspan="5" class="empty-message">
-                  No stock records found
-                </td>
-              </tr>
-              <% } %>
-              <div style="margin-top: 20px">
-                <form action="/admin/history" method="GET">
-                  <button type="submit" class="btn btn-success">
-                    View Users Purchase History
-                  </button>
-                </form>
-              </div>
-            </tbody>
           </table>
         </div>
       </main>

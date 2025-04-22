@@ -4,13 +4,10 @@
     <meta charset="UTF-8" />
     <title>Admin - Manage Users</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- Bootstrap Icons -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
       rel="stylesheet"
     />
-
     <style>
       * {
         box-sizing: border-box;
@@ -20,8 +17,8 @@
 
       body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        display: flex;
         background-color: #f4f4f4;
+        display: flex;
       }
 
       .sidebar {
@@ -29,11 +26,11 @@
         background-color: #1e1e2f;
         color: #fff;
         height: 100vh;
+        padding: 20px;
+        overflow-y: auto;
         position: fixed;
         top: 0;
         left: 0;
-        padding: 20px;
-        overflow-y: auto;
       }
 
       .sidebar h5 {
@@ -44,7 +41,7 @@
 
       .nav {
         list-style: none;
-        padding-left: 0;
+        padding: 0;
         margin-top: 20px;
       }
 
@@ -67,10 +64,15 @@
         background-color: rgba(255, 255, 255, 0.1);
       }
 
+      .main-body-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-left: 250px; /* Account for sidebar */
+      }
+
       .main-content {
-        margin-left: 250px;
         padding: 30px;
-        width: calc(100% - 250px);
       }
 
       .header {
@@ -115,10 +117,10 @@
       }
 
       .action-buttons button {
-        background: none;
-        border: 1px solid #1e1e2f;
-        color: #1e1e2f;
-        padding: 5px 10px;
+        background-color: #000;
+        color: white;
+        padding: 6px 12px;
+        border: none;
         border-radius: 5px;
         cursor: pointer;
         font-size: 0.9rem;
@@ -126,8 +128,7 @@
       }
 
       .action-buttons button:hover {
-        background-color: #1e1e2f;
-        color: #fff;
+        background-color: #333;
       }
 
       .footer {
@@ -136,65 +137,62 @@
         font-size: 0.85rem;
         color: #888;
       }
-      .main-body-content{
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-      }
     </style>
   </head>
-  <body >
-    <div class="main-body-content">
 
-      <%- include('partials/header') %>
-  
-       <%- include('partials/sidebar') %>
-       <div class="main-content">
-         <div class="header">
-          
-           <h2><i class="bi bi-people-fill me-2"></i>Manage Users</h2>
-         </div>
-   
-         <div class="card">
-           <table>
-             <thead>
-               <tr>
-                 <th>Sr. No</th>
-                 <th><i class="bi bi-person-fill"></i> Name</th>
-                 <th><i class="bi bi-envelope-fill"></i> Email</th>
-                 <th><i class="bi bi-gear-fill"></i> Action</th>
-               </tr>
-             </thead>
-             <tbody>
-               <% users.forEach((user, index) => { %>
-               <tr>
-                 <td><%= index + 1 %></td>
-                 <td><%= user.name %></td>
-                 <td><%= user.email %></td>
-                 <td class="action-buttons">
-                   <form
-                     action="/admin/users/<%= user._id %>"
-                     method="POST"
-                     style="display: inline"
-                   >
-                     <button
-                       type="submit"
-                       onclick="return confirm('Delete user?')"
-                     >
-                       Delete
-                     </button>
-                   </form>
-                 </td>
-               </tr>
-               <% }) %>
-             </tbody>
-           </table>
-         </div>
-   
-       
-    <%- include('partials/footer') %>
-       </div>
+  <body>
+    <div class="sidebar">
+      <%- include('partials/sidebar') %>
     </div>
 
+    <div class="main-body-content">
+      <%- include('partials/header') %>
+
+      <div class="main-content">
+        <div class="header">
+          <h2><i class="bi bi-people-fill me-2"></i>Manage Users</h2>
+        </div>
+
+        <div class="card">
+          <table>
+            <thead>
+              <tr>
+                <th>Sr. No</th>
+                <th><i class="bi bi-person-fill"></i> Name</th>
+                <th><i class="bi bi-envelope-fill"></i> Email</th>
+                <th><i class="bi bi-gear-fill"></i> Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% users.forEach((user, index) => { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><%= user.name %></td>
+                <td><%= user.email %></td>
+                <td class="action-buttons">
+                  <form
+                    action="/admin/users/<%= user._id %>"
+                    method="POST"
+                    style="display: inline"
+                  >
+                    <button
+                      type="submit"
+                      onclick="return confirm('Delete user?')"
+                    >
+                      Delete
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="footer">
+          <%- include('partials/footer') %>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

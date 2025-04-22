@@ -90,6 +90,8 @@ const handlePurchaseReport = async (req, res) => {
     const token = req.cookies.token;
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // console.log(decoded);
+    
 
     const currUser = await User.findOne({ name: decoded.name });
     // console.log(currUser)
