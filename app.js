@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 require('dotenv').config();
 const app=express()
-const port=4000
+const port = process.env.PORT || 5000;
 const{ connectTomongodb}=require("./config/connection")
 connectTomongodb()
 app.use(express.json())
@@ -31,4 +31,6 @@ app.use("/admin",adminroutes);
 app.use("/admin",productroutes);
 app.use('/admin', stockRoutes);
 app.use("/user",userDashboard);
-app.listen(port,console.log("http://localhost:4000"))
+app.listen(port, () =>
+  console.log(`Server listening on http://localhost:${port}`)
+);

@@ -1,13 +1,15 @@
 const mongoose = require('mongoose');
 
-const connectTomongodb = async (url) => {
-  mongoose
-    .connect('mongodb+srv://rahilsaiyed1711:rG60ylVvlbJjGWGu@cluster0.mi8dtk0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-    .then(() => console.log('mongo connected:'))
-    .catch((err) => {
-      console.log(err);
-    });
+const connectTomongodb = async () => {
+  const mongoUrl = process.env.MONGO_URI;
+  if (!mongoUrl) throw new Error('MONGODB_URI not set');
+  await mongoose.connect(mongoUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  console.log('MongoDB connected');
 };
+
 module.exports = {
   connectTomongodb,
 };
