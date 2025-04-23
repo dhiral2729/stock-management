@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 require('dotenv').config();
 const app=express()
-const port=4000
+const port=3000
 const{ connectTomongodb}=require("./config/connection")
 connectTomongodb()
 app.use(express.json())
@@ -31,4 +31,9 @@ app.use("/admin",adminroutes);
 app.use("/admin",productroutes);
 app.use('/admin', stockRoutes);
 app.use("/user",userDashboard);
-// app.listen(port,console.log("http://localhost:4000"))
+app.use((req,res,next)=>{
+    res.status(400).render("errorpage",{
+        msg:"The page you are looking for does not exist"
+    })
+})
+app.listen(port,console.log("http://localhost:3000"))

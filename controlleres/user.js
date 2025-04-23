@@ -64,6 +64,10 @@ const login = async (req, res) => {
   }
   try {
     const user = await User.findOne({ email });
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).send("Enter a valid email address.");
+    }
     // console.log(user)
     if (!user) {
       return res.render('login', {
