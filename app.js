@@ -31,9 +31,4 @@ app.use("/admin",adminroutes);
 app.use("/admin",productroutes);
 app.use('/admin', stockRoutes);
 app.use("/user",userDashboard);
-app.use((req,res,next)=>{
-    res.status(400).render("errorpage",{
-        msg:"The page you are looking for does not exist"
-    })
-})
-app.listen(port,console.log("http://localhost:3000"))
+// app.listen(port,console.log("http://localhost:4000"))
