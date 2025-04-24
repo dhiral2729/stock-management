@@ -36,4 +36,4 @@ app.use((req,res,next)=>{
         msg:"The page you are looking for does not exist"
     })
 })
-// app.listen(port,console.log("http://localhost:4000"))
+app.listen(port,console.log("http://localhost:3000"))

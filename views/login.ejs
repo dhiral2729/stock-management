@@ -125,4 +125,17 @@
     </div>
 
 </body>
+<script>
+    document.querySelector("form").addEventListener("submit", function (e) {
+      const emailInput = document.querySelector("input[name='email']");
+      const email = emailInput.value;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+      if (!emailRegex.test(email)) {
+        e.preventDefault(); // Stop form submission
+        alert("Please enter a valid email address!");
+      }
+    });
+  </script>
+  
 </html>

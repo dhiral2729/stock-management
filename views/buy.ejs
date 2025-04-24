@@ -19,9 +19,11 @@
             <th>Added By</th>
             <td><%= stock.addedBy %></td>
 
-          </tr>
-        <tr><th>Category</th><td><%= product.category.name %></td></tr>
-    </tr>
+            <tr>
+              <th>Category</th>
+              <td><%= product.category ? product.category.name : 'N/A' %></td>
+            </tr>
+            
     <tr><th>Available QTY.</th><td><%= stock.quantity %></td></tr>
 
 
