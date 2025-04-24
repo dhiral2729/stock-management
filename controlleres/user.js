@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+
 const {
   createTokenForAdmin,
   createTokenForUser,
@@ -9,7 +10,7 @@ const {
 const handlesignup = async (req, res) => {
   try {
     const { name, email, password, confirm_password } = req.body;
-
+    
     if (password !== confirm_password) {
       return res.status(400).render('signup', {
         error: 'Passwords do not match',
@@ -42,6 +43,7 @@ const loadHome = (req, res) => {
   if (!token) return res.redirect('/login');
 
   try {
+    
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     if (decoded.role === 'admin') {
