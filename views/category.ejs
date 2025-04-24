@@ -70,7 +70,7 @@
 
       button.primary {
         padding: 0.6rem 1.4rem;
-        background-color: black;
+        background-color: #1e90ff;
         color: white;
         border: none;
         border-radius: 6px;
@@ -80,7 +80,7 @@
       }
 
       button.primary:hover {
-        background-color: #333;
+        background-color: #0078e7;
       }
 
       button.danger {
@@ -92,10 +92,9 @@
         cursor: pointer;
       }
 
-      button:hover {
-        background-color:#ffe0e0;
+      button.danger:hover {
+        background-color: #c0392b;
       }
-
 
       .alert.danger {
         background-color: #ffe0e0;
@@ -162,103 +161,77 @@
         color: #888;
         font-size: 0.9rem;
       }
-
-      /* Table Styles */
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-
-      th,
-      td {
-        padding: 0.75rem;
-        text-align: left;
-        border: 1px solid black; /* Black border */
-      }
-
-      
-    thead {
-      background-color: #1e1e2f;
-      color: #fff;
-    }
-
     </style>
   </head>
 
   <body>
-    <%- include('partials/adminheader') %>
+    <%- include('partials/header') %>
 
     <div class="d-flex">
       <%- include('partials/sidebar') %>
 
-      <div class="content-wrapper">
-        <div class="card">
-          <div class="card-title">Category Management</div>
+  
+        <div class="content-wrapper">
+          <div class="card">
+            <div class="card-title">Category Management</div>
 
-          <% if (error) { %>
-            <div class="alert danger"><%= error %></div>
-          <% } %>
+            <% if (error) { %>
+              <div class="alert danger"><%= error %></div>
+            <% } %>
 
-          <div class="form-section">
-            <h3>Manage Category</h3>
-            <form action="/admin/categories/add" method="POST" id="add-category-form">
-              <input
-                type="text"
-                name="name"
-                id="category-name"
-                placeholder="Enter category name"
-                required
-              />
-              <input type="hidden" name="_method" id="method-field" value="POST" />
-              <button type="submit" class="primary" id="submit-btn">Add Category</button>
-              <button type="button" onclick="resetForm()" style="display: none;" id="cancel-btn">Cancel</button>
-            </form>
-          </div>
+            <div class="form-section">
+              <h3>Manage Category</h3>
+              <form action="/admin/categories/add" method="POST" id="add-category-form">
+                <input
+                  type="text"
+                  name="name"
+                  id="category-name"
+                  placeholder="Enter category name"
+                  required
+                />
+                <input type="hidden" name="_method" id="method-field" value="POST" />
+                <button type="submit" class="primary" id="submit-btn">Add Category</button>
+                <button type="button" onclick="resetForm()" style="display: none;" id="cancel-btn">Cancel</button>
+              </form>
+            </div>
 
-          <div class="list-section">
-            <h4>Categories List</h4>
-            <% if (categories && categories.length > 0) { %>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Sr.No</th>
-                    <th>Category Name</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% categories.forEach((category, index) => { %>
-                    <tr>
-                      <td><%= index + 1 %></td>
-                      <td><%= category.name %></td>
-                      <td>
+            <div class="list-section">
+              <h4>Categories List</h4>
+              <ul class="category-list">
+                <% if (categories && categories.length > 0) { %>
+                  <% categories.forEach(category => { %>
+                    <li>
+                      <span><%= category.name %></span>
+                      <div class="actions">
                         <button
-                          class="primary"
                           onclick="editCategory('<%= category._id %>', '<%= category.name %>')"
-                        >Edit</button>
+                          title="Edit"
+                        >
+                          ✏️
+                        </button>
                         <form
                           action="/admin/categories/delete/<%= category._id %>"
                           method="POST"
-                          style="display: inline;"
                           onsubmit="return confirm('Delete this category?');"
+                          style="display:inline;"
                         >
-                          <button type="submit" class="danger">Delete</button>
+                          <button type="submit" class="danger" title="Delete">🗑️</button>
                         </form>
-                      </td>
-                    </tr>
-                  <% }) %>
-                </tbody>
-              </table>
-            <% } else { %>
-              <p class="empty">No categories found.</p>
-            <% } %>
+                      </div>
+                    </li>
+                  <% }); %>
+                <% } else { %>
+                  <li class="empty">No categories found.</li>
+                <% } %>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
 
-      <footer class="footer">
-        &copy; 2025 Stock Manager. All rights reserved.
-      </footer>
+        <footer class="footer">
+          &copy; 2025 Stock Manager. All rights reserved.
+        </footer>
+      </main>
     </div>
 
     <script>

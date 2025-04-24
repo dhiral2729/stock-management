@@ -3,15 +3,13 @@ const Purchase = require('../models/purchase');
 const product = require('../models/product');
 const Stock = require('../models/stock');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const Product = require('../models/product');
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({ role: { $ne: 'admin' } });
     let token = req.cookies.token;
     token = jwt.verify(token, process.env.JWT_SECRET);
-    
-    res.render('adminusers', { users, token , editUser: null});
+    res.render('adminusers', { users, token });
   } catch (error) {
     console.error(error);
     res.status(500).send('Server Error');
@@ -19,7 +17,6 @@ const getAllUsers = async (req, res) => {
 };
 
 const editForm = async (req, res) => {
-
   const user = await User.findById(req.params.id);
 
   res.render('adminusers', { user });
@@ -57,8 +54,9 @@ const viewProductHistory = async (req, res) => {
   try {
     const productId = req.params.id;
     let token = req.cookies.token;
-    token = jwt.verify(token, process.env.JWT_SECRET);
+     token = jwt.verify(token, process.env.JWT_SECRET);
     // console.log(decoded);
+    
 
     const product = await Product.findById(productId);
     const purchases = await Purchase.find({ product: productId })
@@ -85,7 +83,7 @@ const viewProductHistory = async (req, res) => {
 
     res.render('history', {
       token,
-
+      
       summary,
       purchases,
       stockHistory,
@@ -95,42 +93,6 @@ const viewProductHistory = async (req, res) => {
     console.log(err);
   }
 };
-const createUsers = async (req, res) => {
-  try {
-    const token = req.cookies.token;
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    const { name, email, password, role } = req.body;
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({
-      name,
-      email,
-      password: hashedPassword,
-      role,
-    });
-
-    await newUser.save();
-    res.redirect('/admin/users', token, decoded);
-  } catch (err) {
-    console.log('Error creating user:', err);
-    res.status(500).send('Internal Server Error');
-  }
-};
-const editUser = async (req, res) => {
-  try {
-    const { name, email, role } = req.body;
-    const { id } = req.params;
-
-    await User.findByIdAndUpdate(id, { name, email, role });
-
-    res.redirect('/admin/users');
-  } catch (err) {
-    console.error('Error updating user:', err);
-    res.status(500).send('Internal Server Error');
-  }
-};
 
 module.exports = {
   getAllUsers,
@@ -138,7 +100,4 @@ module.exports = {
   deleteUser,
   handleReport,
   viewProductHistory,
-  createUsers,
-editUser
-  
 };

@@ -6,21 +6,9 @@ const jwt = require('jsonwebtoken');
 const Category = require('../models/category');
 const User = require('../models/user');
 const userDashboard = async (req, res) => {
-  const token = req.cookies.token;
-  decoded = jwt.verify(token, process.env.JWT_SECRET);
-  const search = req.query.search || '';
-    const query = search
-      ? { productName: { $regex: search, $options: 'i' } }
-      : {};
-     
-      const products = await Product.find({
-        ...query,
-        category: { $ne: null }
-      }).populate('category');
-      
-  
-  // console.log(products)
-  res.render('udashboard', { token,products,search,token:decoded});
+  let token = req.cookies.token;
+  token = jwt.verify(token, process.env.JWT_SECRET);
+  res.render('udashboard', { token });
 };
 
 const userStocks = async (req, res) => {
