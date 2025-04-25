@@ -10,8 +10,8 @@ const getAllUsers = async (req, res) => {
     const users = await User.find({ role: { $ne: 'admin' } });
     let token = req.cookies.token;
     token = jwt.verify(token, process.env.JWT_SECRET);
-    
-    res.render('adminusers', { users, token , editUser: null});
+
+    res.render('adminusers', { users, token, editUser: null });
   } catch (error) {
     console.error(error);
     res.status(500).send('Server Error');
@@ -19,7 +19,6 @@ const getAllUsers = async (req, res) => {
 };
 
 const editForm = async (req, res) => {
-
   const user = await User.findById(req.params.id);
 
   res.render('adminusers', { user });
@@ -118,20 +117,6 @@ const createUsers = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
-const editUser = async (req, res) => {
-  try {
-    const { name, email, role } = req.body;
-    const { id } = req.params;
-
-    await User.findByIdAndUpdate(id, { name, email, role });
-
-    res.redirect('/admin/users');
-  } catch (err) {
-    console.error('Error updating user:', err);
-    res.status(500).send('Internal Server Error');
-  }
-};
-
 module.exports = {
   getAllUsers,
   editForm,
@@ -139,6 +124,5 @@ module.exports = {
   handleReport,
   viewProductHistory,
   createUsers,
-editUser
-  
+
 };

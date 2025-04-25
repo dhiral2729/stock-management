@@ -3,8 +3,10 @@ const jwt = require("jsonwebtoken")
 exports.getCategory = async (req, res) => {
   try {
     const categories = await Category.find();
-      let token = req.cookies.token;
-      token = jwt.verify(token,process.env.JWT_SECRET)
+     let token = req.cookies.token;
+    //  console.log(token);
+     
+      token = jwt.verify(token, process.env.JWT_SECRET);
     res.render('category', { error: null, categories , token});
   } catch (err) {
     res.render('category', {
@@ -34,7 +36,7 @@ exports.addCategory = async (req, res) => {
   
     res.redirect('/admin/category');
   } catch (error) {
-    res.render('category', { error: 'Error adding category' });
+    res.render('category');
   }
 };
 
@@ -65,7 +67,7 @@ exports.updateCategory = async (req, res) => {
 
     await Category.findByIdAndUpdate(id, { name });
 
-    res.redirect('/admin/category');
+    res.redirect('/admin/category',{msg:"category are update"});
   } catch (error) {
     console.error(error);
     const categories = await Category.find(); 

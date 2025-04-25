@@ -10,6 +10,10 @@ const{ connectTomongodb}=require("./config/connection")
 connectTomongodb()
 app.use(express.json())
 app.use(cookieParser());
+app.use((req,res,next)=>{
+    res.set('Cache-Control', 'no-store');
+    next();
+})
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static('public'));

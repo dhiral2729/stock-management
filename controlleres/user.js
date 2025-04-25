@@ -1,28 +1,31 @@
-const User = require('../models/user');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const {
   createTokenForAdmin,
   createTokenForUser,
 } = require('../services/authentication');
-
+const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 const handlesignup = async (req, res) => {
   try {
     const { name, email, password, confirm_password } = req.body;
+    const nameRegex = /^[A-Za-z\s]{2,}$/;
+    if (!nameRegex.test(name)) {
+      return res.status(400).render('signup', {
+        error: 'Name must contain only letters and at least 2 characters',
+      });
+    }
 
     if (password !== confirm_password) {
       return res.status(400).render('signup', {
         error: 'Passwords do not match',
       });
     }
-
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).render('signup', {
         error: 'User already exists',
       });
     }
-
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User({ name, email, password: hashedPassword });
@@ -53,46 +56,29 @@ const loadHome = (req, res) => {
     return res.redirect('/login');
   }
 };
-
-const login = async (req, res) => {
+const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  const admin = await User.findOne({ email });
-  if (admin.role == 'admin') {
-    const token = createTokenForAdmin(email, password, admin.name);
-    res.cookie('token', token);
-    return res.redirect('/admin/dashboard');
-  }
   try {
     const user = await User.findOne({ email });
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).send("Enter a valid email address.");
-    }
-    // console.log(user)
-    if (!user) {
-      return res.render('login', {
-        message: 'user not found',
-        type: 'error',
-      });
-    }
-    const isMatch = bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.render('login', {
-        message: 'Invalid credentials',
-        type: 'error',
-      });
-    }
+    if (!user)
+      return res.render('login', { error: 'User not found, please sign up' });
 
-    const token = createTokenForUser(email, password, user.name);
-    // console.log(token)
-    res.cookie('token', token);
-    return res.redirect('/user/dashboard');
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.render('login', { error: 'incorrect Password' });
+
+    if (user.role === 'admin') {
+      const token = createTokenForAdmin(user.email, user.password, user.name);
+      res.cookie('token', token);
+      return res.redirect('/admin/dashboard');
+    } else if (user.role === 'user') {
+      const token = createTokenForUser(user.email, user.password, user.name);
+      res.cookie('token', token);
+      return res.redirect('/user/dashboard');
+    } else {
+      return res.render('login', { error: 'Error logging in user/admin' });
+    }
   } catch (err) {
-    console.error('Login error:', err);
-    return res.render('login', {
-      message: 'Login failed. Try again later.',
-      type: 'error',
-    });
+    res.render('login', { error: 'Something went wrong!', email });
   }
 };
 
@@ -104,10 +90,9 @@ const logout = (req, res) => {
     res.status(500).json({ message: 'Logout failed: ' });
   }
 };
-
 module.exports = {
   handlesignup,
-  login,
+  loginUser,
   logout,
   loadHome,
 };

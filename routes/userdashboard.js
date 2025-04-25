@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controlleres/userdashboard'); 
-router.get('/dashboard', userController.userDashboard);
-router.get('/allstocks', userController.userStocks);
-router.get('/buy/:id', userController.getBuyPage);
-router.post('/buy/:id',userController.handlepurchase)
-router.get("/report",userController.handlePurchaseReport)
+const {requireAuth}=require("../middleware/auth")
+router.get('/dashboard', requireAuth,userController.userDashboard);
+router.get('/allstocks', requireAuth,userController.userStocks);
+router.get('/buy/:id', requireAuth,userController.getBuyPage);
+router.post('/buy/:id',requireAuth,userController.handlepurchase)
+router.get("/report",requireAuth,userController.handlePurchaseReport)
 module.exports = router;
