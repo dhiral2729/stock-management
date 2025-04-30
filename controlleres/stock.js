@@ -13,7 +13,8 @@ exports.getStockPage = async (req, res) => {
     let token = req.cookies.token;
     token = jwt.verify(token, process.env.JWT_SECRET);
 
-    res.render('stock', { stocks, products, token });
+    res.render('stock', { stocks, products, token,  success: 'product added',
+      error: 'this is error',});
   } catch (err) {
     console.error('Error fetching stock:', err);
     res.status(500).send('Internal Server Error');
@@ -21,7 +22,6 @@ exports.getStockPage = async (req, res) => {
 };
 exports.addStock = async (req, res) => {
   const { product, quantity, price } = req.body;
-
   try {
     const existingStock = await Stock.findOne({
       product,

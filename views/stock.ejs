@@ -145,12 +145,7 @@
     <%- include('partials/adminheader') %>
     <div class="layout">
       <%- include('partials/sidebar') %>
-      <% if (typeof success !== 'undefined' && success) { %>
-        toastr.success("<%= success %>");
-      <% } %>
-      <% if (typeof error !== 'undefined' && error) { %>
-        toastr.error("<%= error %>");
-      <% } %>
+
       <main class="content">
         <div class="header-row">
           <h2 id="form-title">Add Stock</h2>
@@ -264,14 +259,11 @@
     </tr>
   <% } %>
 </tbody>
-
-
           </table>
         </div>
       </main>
     </div>
 
-    <script>
       function editStock(id, productId, quantity, price) {
         document.getElementById('product').value = productId;
         document.getElementById('quantity').value = quantity;
@@ -292,6 +284,7 @@
         document.getElementById('cancel-btn').style.display = 'none';
         document.getElementById('form-title').textContent = 'Add Stock';
       }
+      
     </script>
 
     <%- include('partials/footer') %>

@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <title>Product List</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <!-- Toastr CSS -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+    rel="stylesheet"
+  />
+
 
     <style>
       :root {
@@ -166,6 +171,29 @@
       }
       .toaster {
         position: fixed;
+        top: 30px;
+        right: 30px;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        color: #fff;
+        z-index: 9999;
+        display: none;
+        animation: fadeInOut 4s forwards;
+      }
+      .toaster {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 5px;
+        color: white;
+        z-index: 9999;
+        font-weight: bold;
+      }
+
+      .toaster {
+        position: fixed;
         top: 20px;
         right: 20px;
         padding: 10px 20px;
@@ -194,21 +222,16 @@
           toastr.success("category added");
         </script>
       <% } %>
-      <% if (success) { %>
-        <script>
-          toastr.success("<%= success %>");
-        </script>
-      <% } %>
       
       <% if (error) { %>
         <script>
           toastr.error("<%= error %>");
         </script>
       <% } %>
-      
-
       <div id="toaster" style="display: none"></div>
 
+      
+      
       <main class="content">
         <div class="header-row">
           <h2><span id="form-title">Add New Product</span></h2>
@@ -310,7 +333,9 @@
         </div>
       </main>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <!-- Toastr JS -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
       function editProduct(id, name, price, categoryId, isBestSeller) {
         const form = document.getElementById('product-form');
@@ -334,19 +359,19 @@
         document.getElementById('cancel-btn').style.display = 'none';
         document.getElementById('form-title').textContent = 'Add New Product';
       }
-    document.getElementById('add-category-form').addEventListener('submit', function (e) {
+      document.getElementById('product-form').addEventListener('submit', function (e) {
     e.preventDefault(); // prevent default form submission
 
     const toaster = document.getElementById('toaster');
-    const input = document.getElementById('category-name');
-    const categoryName = input.value.trim();
+    const input = document.getElementById('productName');
+    const productName = input.value.trim();
 
-    if (!categoryName) {
-      toaster.textContent = "Category name is required.";
+    if (!productName) {
+      toaster.textContent = "Product name is required.";
       toaster.className = 'toaster error';
       toaster.style.display = 'block';
     } else {
-      toaster.textContent = "Category added successfully!";
+      toaster.textContent = "Product added successfully!";
       toaster.className = 'toaster success';
       toaster.style.display = 'block';
 
@@ -360,11 +385,6 @@
     }, 3000);
   });
     </script>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Toastr JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <%- include('partials/footer') %>
   </body>
 </html>

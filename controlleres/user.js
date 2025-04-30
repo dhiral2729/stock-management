@@ -8,19 +8,14 @@ const jwt = require('jsonwebtoken');
 const handlesignup = async (req, res) => {
   try {
     const { name, email, password, confirm_password } = req.body;
-    const nameRegex = /^[A-Za-z\s]{2,}$/;
-
-    if (!nameRegex.test(name)) {
-      return res.status(400).render('signup', { error: 'Name must contain only letters and at least 2 characters' });
-    }
+   
 
     if (password !== confirm_password) {
-      return res.status(400).render('signup', { error: 'Passwords do not match' });
+      return res.status(400).redirect('/signup');
     }
-
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.render('signup', { error: 'Email already exists' });
+      return res.redirect('/signup');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -28,7 +23,7 @@ const handlesignup = async (req, res) => {
     await user.save();
 
   
-    return res.render('login', { success: 'Signup successful!' });
+    return res.redirect('/login');
 
   } catch (error) {
     console.error('Signup error:', error);
