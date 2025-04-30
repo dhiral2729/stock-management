@@ -1,42 +1,31 @@
 const Category = require('../models/category');
-const jwt = require("jsonwebtoken")
+const jwt = require('jsonwebtoken');
 exports.getCategory = async (req, res) => {
   try {
     const categories = await Category.find();
-     let token = req.cookies.token;
+    let token = req.cookies.token;
     //  console.log(token);
-     
-      token = jwt.verify(token, process.env.JWT_SECRET);
-    res.render('category', { error: null, categories , token});
+
+    token = jwt.verify(token, process.env.JWT_SECRET);
+    return res.render('category', { error: null, categories, token });
   } catch (err) {
-    res.render('category', {
-      error: 'Failed to load categories!',  
-      categories: [],
-    });
+    console.log(err);
   }
 };
 
 exports.addCategory = async (req, res) => {
   try {
-    const { name, id} = req.body;
-    const categories = await Category.find();
+    const { name } = req.body;
     const existingCategory = await Category.findOne({ name });
     if (existingCategory) {
-      let token = req.cookies.token;
-      token = jwt.verify(token,process.env.JWT_SECRET)
-      return res.render('category',{ error: 'Category already exists' ,token,categories});
-    }
-    if(id){
-     
-    }else{
+      return res.redirect('/admin/category');
+    } else {
       const newCategory = new Category({ name });
-        await newCategory.save();
-
+      await newCategory.save();
+      res.status(200).redirect('/admin/category');
     }
-  
-    res.redirect('/admin/category');
   } catch (error) {
-    res.render('category');
+    console.log(error);
   }
 };
 
@@ -46,7 +35,7 @@ exports.deleteCategory = async (req, res) => {
     await Category.findByIdAndDelete(id);
     res.redirect('/admin/category');
   } catch (err) {
-    res.render('category', { error: 'Error deleting category' });
+    console.log(err);
   }
 };
 
@@ -59,18 +48,17 @@ exports.updateCategory = async (req, res) => {
 
     if (existingCategory && existingCategory._id.toString() !== id) {
       const categories = await Category.find();
-      return res.render('category', {
+      return res.redirect('/admin/category', {
         categories,
         error: 'Category name already exists',
       });
     }
 
     await Category.findByIdAndUpdate(id, { name });
-
-    res.redirect('/admin/category',{msg:"category are update"});
+    let token = req.cookies.token;
+    token = jwt.verify(token, process.env.JWT_SECRET);
+    res.redirect('/admin/category', token, { msg: 'category are update' });
   } catch (error) {
     console.error(error);
-    const categories = await Category.find(); 
-    res.render('category', { categories, error: 'Error updating category' });
   }
 };

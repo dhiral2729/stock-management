@@ -1,139 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Signup</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+  <meta charset="UTF-8" />
+  <title>Signup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Bootstrap -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <!-- Toastr CSS -->
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
-      rel="stylesheet"
-    />
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Toastr CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
 
-    <style>
-      body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f4f4f4;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      }
-      .signup-container {
-        background-color: #fff;
-        padding: 40px;
-        border-radius: 10px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 400px;
-      }
-      button {
-        background-color: #2a4dbb;
-      }
-      button:hover {
-        background-color: #1e7e34;
-      }
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .signup-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    button {
+      background-color: #2a4dbb;
+    }
+    button:hover {
+      background-color: #1e7e34;
+    }
+    .toaster {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #fff;
+  z-index: 9999;
+  display: none;
+  animation: fadeInOut 4s forwards;
+}
 
-      /* Custom Toastr Styles */
-      .toast-success {
-        background-color: #2a4dbb !important; /* Blue background for success */
-        color: #fff !important; /* White text */
-      }
-      .toast-error {
-        background-color: #dc3545 !important; /* Red background for errors */
-        color: #fff !important;
-      }
-    </style>
-  </head>
-  <body>
+.toaster.success {
+  background-color: #4CAF50; /* Green */
+}
 
-    <div class="signup-container">
-      <h1 class="text-center mb-4">Sign Up</h1>
-      <form action="/signup" method="post">
-        <div class="mb-3">
-          <label for="name" class="form-label">Full Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="name"
-            name="name"
-            required
-            placeholder="Enter your full name"
-          />
-        </div>
-        <div class="mb-3">
-          <label for="email" class="form-label">Email address</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            name="email"
-            required
-            placeholder="Enter your email"
-          />
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            name="password"
-            required
-            placeholder="Enter your password"
-          />
-        </div>
-        <div class="mb-3">
-          <label for="confirm-password" class="form-label">Confirm Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="confirm-password"
-            name="confirm_password"
-            required
-            placeholder="Confirm your password"
-          />
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
-      </form>
-      <p class="text-center mt-3">
-        Already have an account? <a href="/login">Login here</a>
-      </p>
-    </div>
+.toaster.error {
+  background-color: #f44336; /* Red */
+}
 
-    <!-- jQuery (required by Toastr) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Toastr JS -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
-    ></script>
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(-20px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-20px); }
+}
 
-    <!-- Toastr Notification Script -->
+  </style>
+</head>
+<body>
+  <!-- <div id="toaster" class="toaster"></div> -->
+  <!-- <% if (!error) { %>
     <script>
-      // If error exists, show an error toastr
-      // <% if (typeof error !== 'undefined' && error) { %>
-      //   toastr.error("<%= error %>", "Error", {
-      //     closeButton: true,
-      //     progressBar: true,
-      //     timeOut: 3000
-      //   });
-      // <% } %>
-
-      // If success exists, show a success toastr with custom blue color
-      // <% if (typeof success !== 'undefined' && success) { %>
-      //   toastr.success("<%= success %>", "Success", {
-      //     closeButton: true,
-      //     progressBar: true,
-      //     timeOut: 3000
-      //   });
-      // <% } %>
+      toastr.success("category added");
     </script>
+  <% } %>
+  
+  <% if (error) { %>
+    <script>
+      toastr.error("<%= error %>");
+    </script>
+  <% } %> -->
+  <div id="toaster" style="display: none"></div>
+  <div class="signup-container">
+    <h1 class="text-center mb-4">Sign Up</h1>
+    <form action="/signup" method="POST">
+      <div class="mb-3">
+        <label for="name" class="form-label">Full Name</label>
+        <input type="text" class="form-control" id="name" name="name" required placeholder="Enter your full name">
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" name="email" required placeholder="Enter your email">
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password" required placeholder="Enter your password">
+      </div>
+      <div class="mb-3">
+        <label for="confirm-password" class="form-label">Confirm Password</label>
+        <input type="password" class="form-control" id="confirm-password" name="confirm_password" required placeholder="Confirm your password">
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+    </form>
+    <p class="text-center mt-3">
+      Already have an account? <a href="/login">Login here</a>
+    </p>
+  </div>
 
-  </body>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Toastr -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+  <script>
+ window.onload = function () {
+    const errorMessage = "<%= typeof error !== 'undefined' ? error : '' %>";
+    const successMessage = "<%= typeof success !== 'undefined' ? success : '' %>";
+
+    if (errorMessage && errorMessage !== '') {
+      toastr.error(errorMessage);
+    }
+
+    if (successMessage && successMessage !== '') {
+      toastr.success(successMessage);
+    }
+  };
+  </script>
+
+</body>
 </html>

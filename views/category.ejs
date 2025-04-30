@@ -5,18 +5,18 @@
     <title>Admin | Category Management</title>
     <link rel="stylesheet" href="/css/dashboard.css" />
     <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
-  <!-- Toastr CSS -->
-  <link
-    href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
-    rel="stylesheet"
-  />
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Toastr CSS -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+      rel="stylesheet"
+    />
     <style>
       body {
         margin: 0;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background-color: #f5f7fa;
         color: #333;
       }
@@ -68,7 +68,7 @@
         margin-top: 1.5rem;
       }
 
-      form input[type="text"] {
+      form input[type='text'] {
         width: 100%;
         padding: 0.75rem 1rem;
         font-size: 1rem;
@@ -102,9 +102,8 @@
       }
 
       button:hover {
-        background-color:#ffe0e0;
+        background-color: #ffe0e0;
       }
-
 
       .alert.danger {
         background-color: #ffe0e0;
@@ -185,12 +184,51 @@
         border: 1px solid black; /* Black border */
       }
 
-      
-    thead {
-      background-color: #1e1e2f;
-      color: #fff;
-    }
+      thead {
+        background-color: #1e1e2f;
+        color: #fff;
+      }
+      .toaster {
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        color: #fff;
+        z-index: 9999;
+        display: none;
+        animation: fadeInOut 4s forwards;
+      }
+      .toaster {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 5px;
+        color: white;
+        z-index: 9999;
+        font-weight: bold;
+      }
 
+      .toaster {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        color: white;
+        z-index: 9999;
+        font-weight: bold;
+      }
+
+      .toaster.success {
+        background-color: green;
+      }
+
+      .toaster.error {
+        background-color: red;
+      }
     </style>
   </head>
 
@@ -199,19 +237,34 @@
 
     <div class="d-flex">
       <%- include('partials/sidebar') %>
+      <% if (!error) { %>
+        <script>
+          toastr.success("category added");
+        </script>
+      <% } %>
+      
+      <% if (error) { %>
+        <script>
+          toastr.error("<%= error %>");
+        </script>
+      <% } %>
+      <div id="toaster" style="display: none"></div>
 
       <div class="content-wrapper">
         <div class="card">
           <div class="card-title">Category Management</div>
 
           <% if (error) { %>
-            <div class="alert danger"><%= error %></div>
+          <div class="alert danger"><%= error %></div>
           <% } %>
-        
 
           <div class="form-section">
             <h3>Manage Category</h3>
-            <form action="/admin/categories/add" method="POST" id="add-category-form">
+            <form
+              action="/admin/categories/add"
+              method="POST"
+              id="add-category-form"
+            >
               <input
                 type="text"
                 name="name"
@@ -219,48 +272,68 @@
                 placeholder="Enter category name"
                 required
               />
-              <input type="hidden" name="_method" id="method-field" value="POST" />
-              <button type="submit" class="primary" id="submit-btn">Add Category</button>
-              <button type="button" onclick="resetForm()" style="display: none;" id="cancel-btn">Cancel</button>
+              <input
+                type="hidden"
+                name="_method"
+                id="method-field"
+                value="POST"
+              />
+              <button
+              type="submit"
+              class="primary"
+              id="submit-btn"
+            >
+              Add Category
+            </button>
+              <button
+                type="button"
+                onclick="resetForm()"
+                style="display: none"
+                id="cancel-btn"
+              >
+                Cancel
+              </button>
             </form>
           </div>
 
           <div class="list-section">
             <h4>Categories List</h4>
             <% if (categories && categories.length > 0) { %>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Sr.No</th>
-                    <th>Category Name</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% categories.forEach((category, index) => { %>
-                    <tr>
-                      <td><%= index + 1 %></td>
-                      <td><%= category.name %></td>
-                      <td>
-                        <button
-                          class="primary"
-                          onclick="editCategory('<%= category._id %>', '<%= category.name %>')"
-                        >Edit</button>
-                        <form
-                          action="/admin/categories/delete/<%= category._id %>"
-                          method="POST"
-                          style="display: inline;"
-                          onsubmit="return confirm('Delete this category?');"
-                        >
-                          <button type="submit" class="danger">Delete</button>
-                        </form>
-                      </td>
-                    </tr>
-                  <% }) %>
-                </tbody>
-              </table>
+            <table>
+              <thead>
+                <tr>
+                  <th>Sr.No</th>
+                  <th>Category Name</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% categories.forEach((category, index) => { %>
+                <tr>
+                  <td><%= index + 1 %></td>
+                  <td><%= category.name %></td>
+                  <td>
+                    <button
+                      class="primary"
+                      onclick="editCategory('<%= category._id %>', '<%= category.name %>')"
+                    >
+                      Edit
+                    </button>
+                    <form
+                      action="/admin/categories/delete/<%= category._id %>"
+                      method="POST"
+                      style="display: inline"
+                      onsubmit="return confirm('Delete this category?');"
+                    >
+                      <button type="submit" class="danger">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
             <% } else { %>
-              <p class="empty">No categories found.</p>
+            <p class="empty">No categories found.</p>
             <% } %>
           </div>
         </div>
@@ -268,9 +341,7 @@
 
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <!-- Toastr JS -->
-      <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
-      ></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
       <footer class="footer">
         &copy; 2025 Stock Manager. All rights reserved.
       </footer>
@@ -278,34 +349,58 @@
 
     <script>
       function editCategory(id, name) {
-        const form = document.getElementById("add-category-form");
-        const input = document.getElementById("category-name");
-        const methodField = document.getElementById("method-field");
-        const submitBtn = document.getElementById("submit-btn");
-        const cancelBtn = document.getElementById("cancel-btn");
+        const form = document.getElementById('add-category-form');
+        const input = document.getElementById('category-name');
+        const methodField = document.getElementById('method-field');
+        const submitBtn = document.getElementById('submit-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
 
         input.value = name;
         form.action = `/admin/categories/update/${id}`;
-        methodField.value = "PUT";
-        submitBtn.textContent = "Update Category";
-        cancelBtn.style.display = "inline-block";
+        methodField.value = 'PUT';
+        submitBtn.textContent = 'Update Category';
+        cancelBtn.style.display = 'inline-block';
         window.scrollTo({ top: form.offsetTop, behavior: 'smooth' });
       }
 
       function resetForm() {
-        const form = document.getElementById("add-category-form");
-        const input = document.getElementById("category-name");
-        const methodField = document.getElementById("method-field");
-        const submitBtn = document.getElementById("submit-btn");
-        const cancelBtn = document.getElementById("cancel-btn");
+        const form = document.getElementById('add-category-form');
+        const input = document.getElementById('category-name');
+        const methodField = document.getElementById('method-field');
+        const submitBtn = document.getElementById('submit-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
 
-        input.value = "";
-        form.action = "/admin/categories/add";
-        methodField.value = "POST";
-        submitBtn.textContent = "Add Category";
-        cancelBtn.style.display = "none";
+        input.value = '';
+        form.action = '/admin/categories/add';
+        methodField.value = 'POST';
+        submitBtn.textContent = 'Add Category';
+        cancelBtn.style.display = 'none';
       }
-      
+    document.getElementById('add-category-form').addEventListener('submit', function (e) {
+    e.preventDefault(); // prevent default form submission
+
+    const toaster = document.getElementById('toaster');
+    const input = document.getElementById('category-name');
+    const categoryName = input.value.trim();
+
+    if (!categoryName) {
+      toaster.textContent = "Category name is required.";
+      toaster.className = 'toaster error';
+      toaster.style.display = 'block';
+    } else {
+      toaster.textContent = "Category added successfully!";
+      toaster.className = 'toaster success';
+      toaster.style.display = 'block';
+
+      setTimeout(() => {
+        this.submit(); // submit the form after showing toast
+      }, 1000); // delay so user sees the toast
+    }
+
+    setTimeout(() => {
+      toaster.style.display = 'none';
+    }, 3000);
+  });
     </script>
 
     <%- include('partials/footer') %>

@@ -1,5 +1,5 @@
 const Product = require('../models/product');
-const Category=require("../models/category")
+const Category = require('../models/category');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
@@ -16,15 +16,7 @@ exports.createProduct = async (req, res) => {
     }
     const existingProduct = await Product.findOne({ productName, category });
     if (existingProduct) {
-      const categories = await Category.find();
-      const products = await Product.find().populate('category');
-      
-      return res.render('product', {
-        categories,
-        products,
-        token: req.user || {},
-        error: 'Product already exists'
-      });
+      return res.status(404).redirect('/admin/product');
     }
     const newProduct = new Product({
       productName,
@@ -43,13 +35,10 @@ exports.createProduct = async (req, res) => {
 
 exports.getAllProduct = async (req, res) => {
   try {
-    const products = await Product.find().populate('category');
     let token = req.cookies.token;
     token = jwt.verify(token, process.env.JWT_SECRET);
-    res.render('product', { products, token  });
-    }
-   
-  catch (err) {
+    return res.redirect('/admin/product');
+  } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');
   }
@@ -64,7 +53,8 @@ exports.getProductById = async (req, res) => {
 
     let token = req.cookies.token;
     token = jwt.verify(token, process.env.JWT_SECRET);
-    res.render('product', { product, token });
+
+    res.redirect('/admin/product');
   } catch (error) {
     res.status(500).send('Internal Server Error');
   }
@@ -107,26 +97,26 @@ exports.deleteProducts = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
-exports.productList=async (req, res) => {
+exports.productList = async (req, res) => {
+  try {
+    const categories = await Category.find({});
+    const products = await Product.find().populate('category');
+
+    let token = req.cookies.token;
+    if (!token) {
+      return res.redirect('/login');
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-      try {
-        const categories = await Category.find({});
-        const products = await Product.find().populate('category')
-          
-        let token = req.cookies.token;
-        if (!token) {
-          return res.redirect('/login');
-        }
-    
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
-        return res.render('product', {
-          categories,
-          products,
-          token: decoded,
-        });
-      } catch (err) {
-        console.error("Error in /admin/product:", err.message);
-        return res.status(401).redirect('/login');
-      }
+    return res.render('product', {
+      categories,
+      products,
+      token: decoded,
+      success: 'product added',
+      error: 'this is error',
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };

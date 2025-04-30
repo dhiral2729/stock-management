@@ -9,39 +9,34 @@ const handlesignup = async (req, res) => {
   try {
     const { name, email, password, confirm_password } = req.body;
     const nameRegex = /^[A-Za-z\s]{2,}$/;
+
     if (!nameRegex.test(name)) {
-      return res.status(400).render('signup', {
-        error: 'Name must contain only letters and at least 2 characters',
-      });
+      return res.status(400).render('signup', { error: 'Name must contain only letters and at least 2 characters' });
     }
 
     if (password !== confirm_password) {
-      return res.status(400).render('signup', {
-        error: 'Passwords do not match',
-      });
+      return res.status(400).render('signup', { error: 'Passwords do not match' });
     }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).render('signup', {
-        error: 'User already exists',
-      });
+      return res.render('signup', { error: 'Email already exists' });
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
 
+    const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ name, email, password: hashedPassword });
     await user.save();
 
-    return res.redirect('/login');
+  
+    return res.render('login', { success: 'Signup successful!' });
+
   } catch (error) {
     console.error('Signup error:', error);
-    return res.status(500).render('signup', {
-      error: 'Server error. Please try again.',
-    });
+    return res.status(500).render('signup', { error: 'Server error. Please try again.' });
   }
 };
 const loadHome = (req, res) => {
   const token = req.cookies.token;
-
   if (!token) return res.redirect('/login');
 
   try {
@@ -69,10 +64,12 @@ const loginUser = async (req, res) => {
     if (user.role === 'admin') {
       const token = createTokenForAdmin(user.email, user.password, user.name);
       res.cookie('token', token);
+
       return res.redirect('/admin/dashboard');
     } else if (user.role === 'user') {
       const token = createTokenForUser(user.email, user.password, user.name);
       res.cookie('token', token);
+   
       return res.redirect('/user/dashboard');
     } else {
       return res.render('login', { error: 'Error logging in user/admin' });
@@ -81,7 +78,6 @@ const loginUser = async (req, res) => {
     res.render('login', { error: 'Something went wrong!', email });
   }
 };
-
 const logout = (req, res) => {
   try {
     res.clearCookie('token');

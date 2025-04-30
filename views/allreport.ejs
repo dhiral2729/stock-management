@@ -28,17 +28,16 @@
           </tr>
         </thead>
         <tbody>
-          <% purchases.forEach( purchase=> { %>
-          <tr>
-            <td><%= purchase.product.productName %></td>
-            <td><%= purchase.quantity %></td>
-            <td>₹<%= purchase.price %></td>
-            <td><%= new Date(purchase.purchasedAt).toLocaleString() %></td>
-            <td><%= purchase.buyer.name %></td>
-
-          </tr>
-
+          <% purchases.forEach(purchase => { %>
+            <tr>
+              <td><%= purchase.product ? purchase.product.productName : 'N/A' %></td>
+              <td><%= purchase.quantity %></td>
+              <td>₹<%= purchase.price %></td>
+              <td><%= new Date(purchase.purchasedAt).toLocaleString() %></td>
+              <td><%= purchase.buyer ? purchase.buyer.name : 'N/A' %></td>
+            </tr>
           <% }) %>
+          
         </tbody>
       </table>
       <% } %>

@@ -108,6 +108,7 @@
   </style>
 </head>
 <body>
+  
   <div class="signup-container">
     <h1>Login</h1>
     <form action="/login" method="POST">
@@ -136,47 +137,7 @@
     <p>New to the Tool? <a href="/signup">Register</a></p>
   </div>
 
-  <!-- jQuery (required by Toastr) -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Toastr JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-  <!-- Toastr Notification Script -->
-  <script>
-    // If there is an error, show toastr notification
-    <% if (typeof error !== 'undefined' && error) { %>
-      toastr.error("<%= error %>", "Error", {
-        closeButton: true,
-        progressBar: true,
-        timeOut: 3000
-      });
-    <% } %>
-
-    // If there is a success message, show toastr notification
-    <% if (typeof success !== 'undefined' && success) { %>
-      toastr.success("<%= success %>", "Success", {
-        closeButton: true,
-        progressBar: true,
-        timeOut: 3000
-      });
-    <% } %>
-
-    // Email validation before form submission
-    document.querySelector("form").addEventListener("submit", function (e) {
-      const emailInput = document.querySelector("input[name='email']");
-      const email = emailInput.value;
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!emailRegex.test(email)) {
-        e.preventDefault();
-        
-        toastr.error("Please enter a valid email address!", "Error", {
-          closeButton: true,
-          progressBar: true,
-          timeOut: 3000
-        });
-      }
-    });
   </script>
 </body>
 </html>
