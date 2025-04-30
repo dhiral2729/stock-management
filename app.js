@@ -2,6 +2,8 @@ const express = require("express")
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
 const bodyParser = require("body-parser");
+const session = require('express-session');
+const flash = require('connect-flash');
 const path = require("path");
 require('dotenv').config();
 const app=express()
@@ -14,6 +16,13 @@ app.use((req,res,next)=>{
     res.set('Cache-Control', 'no-store');
     next();
 })
+app.use(session({
+    secret: 'Dhiral@123',
+    resave: false,
+    saveUninitialized: true,
+  }));
+  
+app.use(flash());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static('public'));

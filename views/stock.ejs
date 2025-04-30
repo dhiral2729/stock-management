@@ -145,12 +145,19 @@
     <%- include('partials/adminheader') %>
     <div class="layout">
       <%- include('partials/sidebar') %>
-      <% if (typeof success !== 'undefined' && success) { %>
-        toastr.success("<%= success %>");
-      <% } %>
-      <% if (typeof error !== 'undefined' && error) { %>
-        toastr.error("<%= error %>");
-      <% } %>
+    <% if (success) { %>
+  <script>
+    toastr.success("<%= success %>");
+  </script>
+<% } %>
+<% if (error) { %>
+  <script>
+    toastr.error("<%= error %>");
+  </script>
+<% } %>
+
+      <div id="toaster" style="display: none"></div>
+
       <main class="content">
         <div class="header-row">
           <h2 id="form-title">Add Stock</h2>
@@ -292,8 +299,36 @@
         document.getElementById('cancel-btn').style.display = 'none';
         document.getElementById('form-title').textContent = 'Add Stock';
       }
-    </script>
+      document.getElementById('product-form').addEventListener('submit', function (e) {
+    e.preventDefault(); // prevent default form submission
 
+    const toaster = document.getElementById('toaster');
+    const input = document.getElementById('productName');
+    const productName = input.value.trim();
+
+    if (!productName) {
+      toaster.textContent = "Product name is required.";
+      toaster.className = 'toaster error';
+      toaster.style.display = 'block';
+    } else {
+      toaster.textContent = "Product added successfully!";
+      toaster.className = 'toaster success';
+      toaster.style.display = 'block';
+
+      setTimeout(() => {
+        this.submit(); // submit the form after showing toast
+      }, 1000); // short delay
+    }
+
+    setTimeout(() => {
+      toaster.style.display = 'none';
+    }, 3000);
+  });
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <!-- Toastr JS -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <%- include('partials/footer') %>
   </body>
 </html>

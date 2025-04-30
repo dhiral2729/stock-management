@@ -8,7 +8,13 @@ const { requireAuth } = require('../middleware/auth');
 
 // Routes
 router.get('/', authController.loadHome);
-router.get('/signup', (req, res) => res.render('signup'));
+router.get('/signup', (req, res) => {
+  res.render('signup', {
+    successMessage: req.flash('success'),
+    errorMessage: req.flash('error'),
+  });
+});
+
 router.post('/signup', authController.handlesignup);
 
 router.get('/login', (req, res) => res.render('login', {error: null }));

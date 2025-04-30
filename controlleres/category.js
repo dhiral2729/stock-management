@@ -7,7 +7,9 @@ exports.getCategory = async (req, res) => {
     //  console.log(token);
 
     token = jwt.verify(token, process.env.JWT_SECRET);
-    return res.render('category', { error: null, categories, token });
+    return res.render('category', {                                                                                                        
+       categories,
+        token });
   } catch (err) {
     console.log(err);
   }
@@ -18,6 +20,8 @@ exports.addCategory = async (req, res) => {
     const { name } = req.body;
     const existingCategory = await Category.findOne({ name });
     if (existingCategory) {
+      res.cookie('toast_success', 'Login successful!');
+
       return res.redirect('/admin/category');
     } else {
       const newCategory = new Category({ name });

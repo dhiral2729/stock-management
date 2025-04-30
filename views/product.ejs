@@ -205,9 +205,8 @@
           toastr.error("<%= error %>");
         </script>
       <% } %>
-      
-
       <div id="toaster" style="display: none"></div>
+
 
       <main class="content">
         <div class="header-row">
@@ -334,37 +333,10 @@
         document.getElementById('cancel-btn').style.display = 'none';
         document.getElementById('form-title').textContent = 'Add New Product';
       }
-    document.getElementById('add-category-form').addEventListener('submit', function (e) {
-    e.preventDefault(); // prevent default form submission
-
-    const toaster = document.getElementById('toaster');
-    const input = document.getElementById('category-name');
-    const categoryName = input.value.trim();
-
-    if (!categoryName) {
-      toaster.textContent = "Category name is required.";
-      toaster.className = 'toaster error';
-      toaster.style.display = 'block';
-    } else {
-      toaster.textContent = "Category added successfully!";
-      toaster.className = 'toaster success';
-      toaster.style.display = 'block';
-
-      setTimeout(() => {
-        this.submit(); // submit the form after showing toast
-      }, 1000); // delay so user sees the toast
-    }
-
-    setTimeout(() => {
-      toaster.style.display = 'none';
-    }, 3000);
-  });
+     
     </script>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Toastr JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    
     <%- include('partials/footer') %>
   </body>
 </html>

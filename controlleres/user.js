@@ -8,33 +8,32 @@ const jwt = require('jsonwebtoken');
 const handlesignup = async (req, res) => {
   try {
     const { name, email, password, confirm_password } = req.body;
-    const nameRegex = /^[A-Za-z\s]{2,}$/;
-
-    if (!nameRegex.test(name)) {
-      return res.status(400).render('signup', { error: 'Name must contain only letters and at least 2 characters' });
-    }
 
     if (password !== confirm_password) {
-      return res.status(400).render('signup', { error: 'Passwords do not match' });
+      req.flash('error', 'Passwords do not match');
+      return res.redirect('/signup');
     }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.render('signup', { error: 'Email already exists' });
+      req.flash('error', 'Email already exists');
+      return res.redirect('/signup');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ name, email, password: hashedPassword });
     await user.save();
 
-  
-    return res.render('login', { success: 'Signup successful!' });
-
+    req.flash('success', 'Signup successful! Please log in.');
+    return res.redirect('/login');
+    
   } catch (error) {
     console.error('Signup error:', error);
-    return res.status(500).render('signup', { error: 'Server error. Please try again.' });
+    req.flash('error', 'Internal server error');
+    return res.redirect('/signup');
   }
 };
+
 const loadHome = (req, res) => {
   const token = req.cookies.token;
   if (!token) return res.redirect('/login');
@@ -63,6 +62,7 @@ const loginUser = async (req, res) => {
 
     if (user.role === 'admin') {
       const token = createTokenForAdmin(user.email, user.password, user.name);
+      
       res.cookie('token', token);
 
       return res.redirect('/admin/dashboard');

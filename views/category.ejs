@@ -105,58 +105,6 @@
         background-color: #ffe0e0;
       }
 
-      .alert.danger {
-        background-color: #ffe0e0;
-        color: #a94442;
-        padding: 0.75rem;
-        border-radius: 6px;
-        margin-bottom: 1rem;
-      }
-
-      .list-section {
-        margin-top: 2rem;
-      }
-
-      .category-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      .category-list li {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem;
-        border: 1px solid #eee;
-        border-radius: 8px;
-        margin-bottom: 0.75rem;
-        background-color: #fff;
-        transition: background 0.2s;
-      }
-
-      .category-list li:hover {
-        background-color: #f0f4f8;
-      }
-
-      .category-list li .actions {
-        display: flex;
-        gap: 0.5rem;
-      }
-
-      .category-list li .actions button {
-        background: transparent;
-        border: none;
-        font-size: 1.1rem;
-        cursor: pointer;
-        color: #333;
-        transition: color 0.2s;
-      }
-
-      .category-list li .actions button:hover {
-        color: #1e90ff;
-      }
-
       .empty {
         text-align: center;
         padding: 1rem;
@@ -188,47 +136,6 @@
         background-color: #1e1e2f;
         color: #fff;
       }
-      .toaster {
-        position: fixed;
-        top: 30px;
-        right: 30px;
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        font-size: 1rem;
-        color: #fff;
-        z-index: 9999;
-        display: none;
-        animation: fadeInOut 4s forwards;
-      }
-      .toaster {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 5px;
-        color: white;
-        z-index: 9999;
-        font-weight: bold;
-      }
-
-      .toaster {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 10px 20px;
-        border-radius: 5px;
-        color: white;
-        z-index: 9999;
-        font-weight: bold;
-      }
-
-      .toaster.success {
-        background-color: green;
-      }
-
-      .toaster.error {
-        background-color: red;
-      }
     </style>
   </head>
 
@@ -237,26 +144,12 @@
 
     <div class="d-flex">
       <%- include('partials/sidebar') %>
-      <% if (!error) { %>
-        <script>
-          toastr.success("category added");
-        </script>
-      <% } %>
-      
-      <% if (error) { %>
-        <script>
-          toastr.error("<%= error %>");
-        </script>
-      <% } %>
-      <div id="toaster" style="display: none"></div>
+
+    
 
       <div class="content-wrapper">
         <div class="card">
           <div class="card-title">Category Management</div>
-
-          <% if (error) { %>
-          <div class="alert danger"><%= error %></div>
-          <% } %>
 
           <div class="form-section">
             <h3>Manage Category</h3>
@@ -279,12 +172,12 @@
                 value="POST"
               />
               <button
-              type="submit"
-              class="primary"
-              id="submit-btn"
-            >
-              Add Category
-            </button>
+                type="submit"
+                class="primary"
+                id="submit-btn"
+              >
+                Add Category
+              </button>
               <button
                 type="button"
                 onclick="resetForm()"
@@ -376,31 +269,6 @@
         submitBtn.textContent = 'Add Category';
         cancelBtn.style.display = 'none';
       }
-    document.getElementById('add-category-form').addEventListener('submit', function (e) {
-    e.preventDefault(); // prevent default form submission
-
-    const toaster = document.getElementById('toaster');
-    const input = document.getElementById('category-name');
-    const categoryName = input.value.trim();
-
-    if (!categoryName) {
-      toaster.textContent = "Category name is required.";
-      toaster.className = 'toaster error';
-      toaster.style.display = 'block';
-    } else {
-      toaster.textContent = "Category added successfully!";
-      toaster.className = 'toaster success';
-      toaster.style.display = 'block';
-
-      setTimeout(() => {
-        this.submit(); // submit the form after showing toast
-      }, 1000); // delay so user sees the toast
-    }
-
-    setTimeout(() => {
-      toaster.style.display = 'none';
-    }, 3000);
-  });
     </script>
 
     <%- include('partials/footer') %>

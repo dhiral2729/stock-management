@@ -13,7 +13,11 @@ exports.getStockPage = async (req, res) => {
     let token = req.cookies.token;
     token = jwt.verify(token, process.env.JWT_SECRET);
 
-    res.render('stock', { stocks, products, token });
+    res.render('stock', { stocks, 
+      products, 
+      token ,
+      error:null,
+      success:"stock added"});
   } catch (err) {
     console.error('Error fetching stock:', err);
     res.status(500).send('Internal Server Error');
@@ -41,8 +45,7 @@ exports.addStock = async (req, res) => {
         quantity,
         price,
         addedBy: token.name,
-        success: req.query.success || null,
-        error: req.query.error || null
+       
       });
     }
 

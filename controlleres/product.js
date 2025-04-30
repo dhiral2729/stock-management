@@ -114,7 +114,7 @@ exports.productList = async (req, res) => {
       products,
       token: decoded,
       success: 'product added',
-      error: 'this is error',
+      error: null,
     });
   } catch (err) {
     console.log(err);
