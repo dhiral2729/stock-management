@@ -24,17 +24,16 @@ router.get('/admin/dashboard', requireAuth, (req, res) => {
   return res.render('admindashboard', { token });
 });
 
-// router.get('/user/dashboard', requireAuth, async(req, res) => {
-//   let token = req.cookies.token;
-//   token = jwt.verify(token, process.env.JWT_SECRET);
-//   const search = req.query.search || '';
-//   const query = search
-//     ? { productName: { $regex: search, $options: 'i' } }
-//     : {};
+router.get('/user/dashboard', requireAuth, async(req, res) => {
+  let token = req.cookies.token;
+  token = jwt.verify(token, process.env.JWT_SECRET);
+  const search = req.query.search || '';
+  const query = search
+    ? { productName: { $regex: search, $options: 'i' } }
+    : {};
 
-//   const products = await Product.find(query).populate('category');
-//   console.log(products.category)
-//   return res.render('udashboard',{token , search, products});
-// });
+  const products = await Product.find(query).populate('category');
+  return res.render('udashboard',{token , search, products});
+});
 
 module.exports = router;
