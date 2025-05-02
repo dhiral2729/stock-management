@@ -10,16 +10,15 @@ const { requireAuth } = require('../middleware/auth');
 router.get('/', authController.loadHome);
 
 router.get('/signup', (req, res) => {
-  res.render('signup');  // `success_msg` and `error_msg` should be available here
+  res.render('signup', {
+    successMessages: req.flash('success'),
+    errorMessages: req.flash('error')
+  });
 });
 router.post('/signup', authController.handlesignup);
 
 router.get('/login', (req, res) => res.render('login', {error: null }));
 router.post('/login', authController.loginUser);
-
-// router.get('/login', (req, res) => res.render('login'));
-// // router.post('/login', authController.loginAdmin);
-
 
 router.get('/logout', authController.logout);
 

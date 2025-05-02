@@ -5,31 +5,43 @@ const {
 } = require('../services/authentication');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+
 const handlesignup = async (req, res) => {
   try {
     const { name, email, password, confirm_password } = req.body;
-   
-
-    if (password !== confirm_password) {
-      return res.status(400).redirect('/signup');
+    if(!name){
+      req.flash('error', 'Name is required!');
+      return res.redirect('/signup');
     }
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
+    if(!email){
+      req.flash('error', 'Email is required!');
       return res.redirect('/signup');
     }
 
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      req.flash('error', 'Email is already registered.');
+      return res.redirect('/signup');
+    }
+
+    if (password !== confirm_password) {
+      req.flash('error', 'Passwords do not match!');
+      return res.redirect('/signup');
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ name, email, password: hashedPassword });
     await user.save();
 
-  
+    req.flash('success', 'Signup successful! Please log in.');
     return res.redirect('/login');
 
   } catch (error) {
     console.error('Signup error:', error);
-    return res.status(500).render('signup', { error: 'Server error. Please try again.' });
+    req.flash('error', 'Server error. Please try again.');
+    return res.redirect('/signup');
   }
 };
+
 const loadHome = (req, res) => {
   const token = req.cookies.token;
   if (!token) return res.redirect('/login');

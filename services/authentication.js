@@ -35,12 +35,19 @@ function validatetoken(adminToken ) {
   
   return payload;
 }
-
-
+// const generateToken = (user) => {
+//   const payload = {
+//     user: {
+//       id: user._id,
+//     }
+//   };
+//   return jwt.sign(payload, process.env.JWT_SECRET);
+// };
 module.exports = {
   createTokenForUser,
   createTokenForAdmin,
   validatetoken,
   validatetokenForUser,
+  // generateToken
   
 };

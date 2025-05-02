@@ -11,10 +11,8 @@
       rel="stylesheet"
     />
     <!-- Toastr CSS -->
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
 
     <style>
       body {
@@ -39,13 +37,47 @@
       button:hover {
         background-color: #1e7e34;
       }
+
+
+      /* for toast */
+
+      .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+      }
+      .toast {
+        padding: 12px 20px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        color: #fff;
+        font-weight: bold;
+        animation: fadeInOut 4s forwards;
+      }
+      .toast-success {
+        background-color: #28a745;
+      }
+      .toast-error {
+        background-color: #dc3545;
+      }
+      @keyframes fadeInOut {
+        0% { opacity: 0; transform: translateY(-20px); }
+        10% { opacity: 1; transform: translateY(0); }
+        90% { opacity: 1; }
+        100% { opacity: 0; transform: translateY(-20px); }
+      }
+      /* end toast */
     </style>
 
   </head>
   <body>
-
+    <div id="toast-container" class="toast-container"></div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <div class="signup-container">
       <h1 class="text-center mb-4">Sign Up</h1>
+         
       <form action="/signup" method="POST">
         <div class="mb-3">
           <label for="name" class="form-label">Full Name</label>
@@ -54,7 +86,7 @@
             class="form-control"
             id="name"
             name="name"
-            required
+            
             placeholder="Enter your full name"
           />
         </div>
@@ -65,7 +97,7 @@
             class="form-control"
             id="email"
             name="email"
-            required
+            
             placeholder="Enter your email"
           />
         </div>
@@ -76,7 +108,7 @@
             class="form-control"
             id="password"
             name="password"
-            required
+            
             placeholder="Enter your password"
           />
         </div>
@@ -87,7 +119,7 @@
             class="form-control"
             id="confirm-password"
             name="confirm_password"
-            required
+            
             placeholder="Confirm your password"
           />
         </div>
@@ -100,4 +132,45 @@
 
 
   </body>
+
+
+  <script>
+    const toastContainer = document.getElementById('toast-container');
+    const flashSuccess = "<%= success && success.length > 0 ? success[0] : '' %>";
+    console.log("flashSuccess",flashSuccess);
+    const flashError = "<%= error && error.length > 0 ? error[0] : '' %>";
+    function showToast(message, type) {
+      if (!message) return;
+      const toast = document.createElement('div');
+      toast.classList.add('toast', `toast-${type}`);
+      toast.innerText = message;
+      toastContainer.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
+    }
+  
+    if (flashSuccess) showToast(flashSuccess, 'success');
+    if (flashError) showToast(flashError, 'error');
+  </script>
+  
+  <!-- <script>
+    $(document).ready(function () {
+      toastr.options = {
+        closeButton: true,
+        progressBar: true,
+        positionClass: 'toast-top-right',
+        timeOut: 3000
+      };
+  
+      const successMessages =  JSON.stringify(successMessages || []) ;
+      const errorMessages = JSON.stringify(errorMessages || []) ;
+  
+      successMessages.forEach(msg => toastr.success(msg));
+      errorMessages.forEach(msg => toastr.error(msg));
+    });
+  </script> -->
+
+<script>
+  
+</script>
+
 </html>

@@ -20,6 +20,10 @@ const shopSchema=new mongoose.Schema({
  categoryName:{
     type:mongoose.Schema.Types.ObjectId,
    ref:"category"
+ },
+ createdBy: {
+   type: mongoose.Schema.Types.ObjectId,
+   ref: 'User'
  }
 },{timestamps:true})
 
