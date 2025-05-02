@@ -87,6 +87,7 @@ const login = async (req, res) => {
     // console.log(token)
     res.cookie('token', token);
     return res.redirect('/user/dashboard');
+    
   } catch (err) {
     console.error('Login error:', err);
     return res.render('login', {
@@ -109,5 +110,6 @@ module.exports = {
   handlesignup,
   login,
   logout,
-  loadHome,
+  loadHome
+
 };

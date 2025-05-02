@@ -18,6 +18,7 @@ const userroute= require('./routes/user')
 const categoryroutes=require("./routes/category")
 const adminroutes=require("./routes/admin")
 const productroutes=require("./routes/product")
+const shoproutes=require("./routes/shop")
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
 const stockRoutes = require('./routes/stock');
@@ -31,6 +32,7 @@ app.use("/admin",adminroutes);
 app.use("/admin",productroutes);
 app.use('/admin', stockRoutes);
 app.use("/user",userDashboard);
+app.use("/admin",shoproutes)
 app.use((req,res,next)=>{
     res.status(400).render("errorpage",{
         msg:"The page you are looking for does not exist"
