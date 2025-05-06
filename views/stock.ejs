@@ -233,11 +233,10 @@
         </td>
         <td>
           <% if (stock.product) { %>
-            <button
-              onclick="editStock('<%= stock._id %>', '<%= stock.product._id %>', '<%= stock.quantity %>', '<%= stock.price %>')"
-            >
-              Edit
-            </button>
+            <button onclick="editStock('<%= stock._id %>', '<%= stock.product._id %>', '<%= stock.quantity %>', '<%= stock.price %>')">
+  Edit
+</button>
+
           <% } else { %>
             <span>Product not available</span>
           <% } %>
@@ -263,29 +262,26 @@
         </div>
       </main>
     </div>
+    <script>
+  function editStock(id, productId, quantity, price) {
+    document.getElementById('product').value = productId;
+    document.getElementById('quantity').value = quantity;
+    document.getElementById('price').value = price;
+    document.getElementById('stock-form').action = `/admin/stocks/update/${id}`;
+    document.getElementById('submit-btn').textContent = 'Update Stock';
+    document.getElementById('cancel-btn').style.display = 'inline-block';
+    document.getElementById('form-title').textContent = 'Update Stock';
+  }
 
-      function editStock(id, productId, quantity, price) {
-        document.getElementById('product').value = productId;
-        document.getElementById('quantity').value = quantity;
-        document.getElementById('price').value = price;
-        document.getElementById(
-          'stock-form'
-        ).action = `/admin/stocks/update/${id}`;
-        document.getElementById('submit-btn').textContent = 'Update Stock';
-        document.getElementById('cancel-btn').style.display = 'inline-block';
-        document.getElementById('form-title').textContent = 'Update Stock';
-      }
-
-      function resetForm() {
-        const form = document.getElementById('stock-form');
-        form.reset();
-        form.action = '/admin/stocks/add';
-        document.getElementById('submit-btn').textContent = 'Add Stock';
-        document.getElementById('cancel-btn').style.display = 'none';
-        document.getElementById('form-title').textContent = 'Add Stock';
-      }
-      
-    </script>
+  function resetForm() {
+    const form = document.getElementById('stock-form');
+    form.reset();
+    form.action = '/admin/stocks/add';
+    document.getElementById('submit-btn').textContent = 'Add Stock';
+    document.getElementById('cancel-btn').style.display = 'none';
+    document.getElementById('form-title').textContent = 'Add Stock';
+  }
+</script>
 
     <%- include('partials/footer') %>
   </body>

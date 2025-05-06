@@ -149,29 +149,23 @@
         <div class="form-section">
           <h3>Manage Category</h3>
           <form
-            action="/admin/categories/add"
-            method="POST"
-            id="myForm"
-          >
-            <input
-              type="text"
-              name="name"
-              id="category-name"
-              placeholder="Enter category name"
-              required
-            />
-            <button type="submit" class="primary" id="submit-btn">
-              Add Category
-            </button>
-            <button
-              type="button"
-              onclick="resetForm()"
-              style="display: none"
-              id="cancel-btn"
-            >
-              Cancel
-            </button>
-          </form>
+          action="/admin/categories/add"
+          method="POST"
+          id="category-form"
+          enctype="application/x-www-form-urlencoded"
+        >
+          <input
+            type="text"
+            name="name"
+            id="category-name"
+            placeholder="Enter category name"
+            required
+          />
+          <input type="hidden" name="_method" id="method-field" value="POST" />
+          <button type="submit" class="primary" id="submit-btn">Add Category</button>
+          <button type="button" onclick="resetForm()" style="display: none" id="cancel-btn">Cancel</button>
+        </form>
+        
         </div>
 
         <div class="list-section">
@@ -184,6 +178,7 @@
                 <th>Category Name</th>
                 <th>Actions</th>
               </tr>
+
             </thead>
             <tbody>
               <% categories.forEach((category, index) => { %>
@@ -227,108 +222,97 @@
 
     <!-- Toastr Notification Flash -->
     <script>
-      if (success && success.length > 0) {
-        toastr.options = {
-          closeButton: true,
-          progressBar: true,
-          positionClass: 'toast-top-right',
-          timeOut: 3000,
-        };
-        toastr.success('<%= success[0] %>');
-      }
+      // if (success && success.length > 0) {
+      //   toastr.options = {
+      //     closeButton: true,
+      //     progressBar: true,
+      //     positionClass: 'toast-top-right',
+      //     timeOut: 3000,
+      //   };
+      //   toastr.success(' %>');
+      // }
 
-      if (error && error.length > 0) {
-        toastr.options = {
-          closeButton: true,
-          progressBar: true,
-          positionClass: 'toast-top-right',
-          timeOut: 3000,
-        };
-        toastr.error();
-      }
+      // if (error && error.length > 0) {
+      //   toastr.options = {
+      //     closeButton: true,
+      //     progressBar: true,
+      //     positionClass: 'toast-top-right',
+      //     timeOut: 3000,
+      //   };
+      //   toastr.error();
+      // }
     </script>
-
-    <script>
-document.getElementById('myForm').addEventListener('submit', async function handleSubmit(e) {
-  e.preventDefault();
-  const form = e.target;
-  const name = form.name;
-  console.log(name.value);
+<script>
+  document.getElementById('category-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
   
-  try {
-    // Create a proper FormData object or JSON payload
-    const formData = new FormData();
-    formData.append('name', name.value);
-    
-    // Alternative JSON approach
-    // const payload = JSON.stringify({ name: name.value });
-    
-    const response = await fetch(form.action, {
-      method: form.method,
-      // For FormData:
-      body: formData,
-      
-      // For JSON payload:
-      // body: payload,
-      // headers: {
-      //   'Content-Type': 'application/json'
-      // },
-      
-      redirect: 'manual', // Prevent fetch from automatically following redirects
-    });
-    
-    if (response.status === 302) {
-      window.location.href = response.headers.get('Location') || window.location.href;
-      // Or just reload the page
-      // window.location.reload();
-    } else if (response.status === 500) {
-      toastr.error("Error processing the category request");
-    } else {
-      // Handle other responses
-      const result = await response.json().catch(() => response.text());
-      console.log('Response:', result);
-      
-      if (response.ok) {
-        toastr.success("Category operation completed successfully");
-        // Optionally reset the form on success
-        form.reset();
-        // Reload the page to show updated categories
-        window.location.reload();
-      }
+    const form = e.target;
+    const name = form.name.value.trim();
+    const action = form.action;
+    const method = form.querySelector('#method-field').value;
+  
+    if (!name) {
+      toastr.error('Category name is required');
+      return;
     }
-  } catch (error) {
-    console.error('Error:', error);
-    toastr.error("An error occurred while processing your request");
-  }
-});
-      function editCategory(id, name) {
-        const form = document.getElementById('add-category-form');
-        const input = document.getElementById('category-name');
-        const methodField = document.getElementById('method-field');
-        const submitBtn = document.getElementById('submit-btn');
-        const cancelBtn = document.getElementById('cancel-btn');
-
-        input.value = name;
-        form.action = `/admin/categories/update/${id}`;
-        methodField.value = 'PUT';
-        submitBtn.textContent = 'Update Category';
-        cancelBtn.style.display = 'inline-block';
-        window.scrollTo({ top: form.offsetTop, behavior: 'smooth' });
+  
+    try {
+      const response = await fetch(action, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({ name })
+      });
+  
+      if (response.redirected) {
+        window.location.href = response.url;
+      } else {
+        const data = await response.json();
+        if (response.ok) {
+          toastr.success('Success');
+          window.location.reload();
+        } else {
+          toastr.error(data.msg || 'Something went wrong');
+        }
       }
+    } catch (error) {
+      console.error('Fetch error:', error);
+      toastr.error('An error occurred');
+    }
+  });
+  
 
-      function resetForm() {
-        const form = document.getElementById('add-category-form');
-        const input = document.getElementById('category-name');
-        const methodField = document.getElementById('method-field');
-        const submitBtn = document.getElementById('submit-btn');
-        const cancelBtn = document.getElementById('cancel-btn');
 
-        input.value = '';
-        form.action = '/admin/categories/add';
-        methodField.value = 'POST';
-        submitBtn.textContent = 'Add Category';
-        cancelBtn.style.display = 'none';
-      }
+function editCategory(id, name) {
+  const form = document.getElementById('category-form');
+  const input = document.getElementById('category-name');
+  const methodField = document.getElementById('method-field');
+  const submitBtn = document.getElementById('submit-btn');
+  const cancelBtn = document.getElementById('cancel-btn');
+
+  input.value = name;
+  form.action = `/admin/categories/update/${id}`;
+  methodField.value = 'PUT';
+  submitBtn.textContent = 'Update Category';
+  cancelBtn.style.display = 'inline-block';
+  window.scrollTo({ top: form.offsetTop, behavior: 'smooth' });
+}
+
+function resetForm() {
+  const form = document.getElementById('category-form');
+  const input = document.getElementById('category-name');
+  const methodField = document.getElementById('method-field');
+  const submitBtn = document.getElementById('submit-btn');
+  const cancelBtn = document.getElementById('cancel-btn');
+
+  input.value = '';
+  form.action = '/admin/categories/add';
+  methodField.value = 'POST';
+  submitBtn.textContent = 'Add Category';
+  cancelBtn.style.display = 'none';
+}
+
     </script>
 
     <%- include('partials/footer') %>

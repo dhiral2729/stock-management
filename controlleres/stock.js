@@ -54,6 +54,8 @@ exports.addStock = async (req, res) => {
 };
 
 exports.updateStock = async (req, res) => {
+  // console.log(req.body);
+  
   const { product, quantity } = req.body;
   try {
     await Stock.findByIdAndUpdate(req.params.id, { product, quantity });

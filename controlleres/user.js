@@ -68,7 +68,7 @@ const loginUser = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.render('login', { error: 'incorrect Password' });
 
-    if (user.role === 'admin') {
+    if (user.role === 'shopadmin') {
       const token = createTokenForAdmin(user.email, user.password, user.name);
       res.cookie('token', token);
 

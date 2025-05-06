@@ -30,7 +30,7 @@ exports.addCategory = async (req, res) => {  //complated
     const newCategory = new Category({ name });
     await newCategory.save();
 
-    res.status(200).json({msg:"success", data: newCategory})
+    res.status(200).redirect('/admin/category');
   } catch (error) {
     res.status(500).json({ msg: 'error' });
   }
@@ -50,8 +50,12 @@ exports.deleteCategory = async (req, res) => {
 };
 exports.updateCategory = async (req, res) => {
 
+
   const { id } = req.params;
-  const { name } = req.body;
+  // console.log(id);
+ 
+const {name}=req.body;
+  // console.log(name);
 
   try {
     if(!name){

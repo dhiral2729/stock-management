@@ -45,10 +45,12 @@ function checkForAuthenticationCookieUser(userToken){
     return next();
   }
 }
+
 module.exports = {
   requireAuth,
    checkForAuthenticationCookie,
-   checkForAuthenticationCookieUser
+   checkForAuthenticationCookieUser,
+  
 };
 
 

@@ -35,19 +35,32 @@ function validatetoken(adminToken ) {
   
   return payload;
 }
-// const generateToken = (user) => {
-//   const payload = {
-//     user: {
-//       id: user._id,
-//     }
-//   };
-//   return jwt.sign(payload, process.env.JWT_SECRET);
-// };
+function createTokenForShop(id,role,email) {
+  const payload = {
+  
+   id,
+   role,
+   email
+  };                                                                                                   
+                                
+  const token = jwt.sign(payload, secreteKey);
+  console.log(token);
+  
+  return token;
+}
+function validatetokenShop( shopToken) {
+  const payload = jwt.verify(shopToken, secreteKey);
+  // console.log(payload);
+  
+  return payload;
+}
 module.exports = {
   createTokenForUser,
   createTokenForAdmin,
+  createTokenForShop,
   validatetoken,
   validatetokenForUser,
-  // generateToken
+  validatetokenShop
+  
   
 };

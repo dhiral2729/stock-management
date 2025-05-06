@@ -2,8 +2,8 @@ const express = require("express")
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
 const bodyParser = require("body-parser");
-const session = require('express-session');
-const flash = require('connect-flash');
+// const session = require('express-session');
+// const flash = require('connect-flash');
 const path = require("path");
 require('dotenv').config();
 const app=express()
@@ -16,20 +16,6 @@ app.use((req,res,next)=>{
     res.set('Cache-Control', 'no-store');
     next();
 })
-
-app.use(session({
-    secret: 'secrte',
-    resave: false,
-    saveUninitialized: true,
-  }));
-
-  app.use(flash());
-
-  app.use((req, res, next) => {
-    res.locals.success = req.flash('success');
-    res.locals.error = req.flash('error');
-    next();
-  });
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static('public'));
@@ -38,7 +24,8 @@ const userroute= require('./routes/user')
 const categoryroutes=require("./routes/category")
 const adminroutes=require("./routes/admin")
 const productroutes=require("./routes/product")
-// const shoproutes=require("./routes/shop")
+const shoproutes=require("./routes/shop")
+const shopusersroutes=require("./routes/shopusers")
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
 const stockRoutes = require('./routes/stock');
@@ -52,7 +39,8 @@ app.use("/admin",adminroutes);
 app.use("/admin",productroutes);
 app.use('/admin', stockRoutes);
 app.use("/user",userDashboard);
-// app.use("/",shoproutes)
+app.use("/admin",shoproutes)
+app.use("/admin",shopusersroutes)
 app.use((req,res,next)=>{
     res.status(400).render("errorpage",{
         msg:"The page you are looking for does not exist"

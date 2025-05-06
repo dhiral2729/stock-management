@@ -1,33 +1,27 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const shopSchema=new mongoose.Schema({
- name:{
-    type:String
- },
- email:{
-    type:String,
-    required:true
- },
- password:{
-    type:String,
-    required:true
- },
- role:{
-    type:String,
-    enum:['superAdmin','shopAdmin','shopUser'],
-    default:'shopUser'
- },
- categoryName:{
-    type:mongoose.Schema.Types.ObjectId,
-   ref:"category"
- },
- createdBy: {
-   type: mongoose.Schema.Types.ObjectId,
-   ref: 'User'
- }
-},{timestamps:true})
+const shopSchema = new mongoose.Schema({
+  shopName: {
+    type: String,
+    required: true,
+  },
+  contactPersonName: {
+    type: String,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  superAdminId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'users',
+  },
+}, { timestamps: true });
 
-const Shop = new mongoose.model('shop', shopSchema);
+const Shop = mongoose.model('Shop', shopSchema);
 module.exports = Shop;
-
-
