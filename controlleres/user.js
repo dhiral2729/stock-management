@@ -20,19 +20,19 @@ const handlesignup = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      req.flash('error', 'Email is already registered.');
+      // req.flash('error', 'Email is already registered.');
       return res.redirect('/signup');
     }
 
     if (password !== confirm_password) {
-      req.flash('error', 'Passwords do not match!');
+      // req.flash('error', 'Passwords do not match!');
       return res.redirect('/signup');
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ name, email, password: hashedPassword });
     await user.save();
 
-    req.flash('success', 'Signup successful! Please log in.');
+    // req.flash('success', 'Signup successful! Please log in.');
     return res.redirect('/login');
 
   } catch (error) {
@@ -66,25 +66,29 @@ const loginUser = async (req, res) => {
       return res.render('login', { error: 'User not found, please sign up' });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.render('login', { error: 'incorrect Password' });
+    if (!isMatch) return res.render('login', { error: 'Incorrect password' });
 
-    if (user.role === 'shopadmin') {
-      const token = createTokenForAdmin(user.email, user.password, user.name);
+    let token;
+    if (user.role === 'superadmin') {
+      token = createTokenForAdmin(user.email, user.password, user.name); 
       res.cookie('token', token);
-
+      return res.redirect('/superadmin/dashboard');
+    } else if (user.role === 'shopadmin') {
+      token = createTokenForAdmin(user.email, user.password, user.name);
+      res.cookie('token', token);
       return res.redirect('/admin/dashboard');
     } else if (user.role === 'user') {
-      const token = createTokenForUser(user.email, user.password, user.name);
+      token = createTokenForUser(user.email, user.password, user.name);
       res.cookie('token', token);
-   
       return res.redirect('/user/dashboard');
     } else {
-      return res.render('login', { error: 'Error logging in user/admin' });
+      return res.render('login', { error: 'Invalid user role' });
     }
   } catch (err) {
-    res.render('login', { error: 'Something went wrong!', email });
+    res.render('login', {  error: 'Invalid email or password' , email });
   }
 };
+
 const logout = (req, res) => {
   try {
     res.clearCookie('token');

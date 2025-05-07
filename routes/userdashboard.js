@@ -7,4 +7,5 @@ router.get('/allstocks', requireAuth,userController.userStocks);
 router.get('/buy/:id', requireAuth,userController.getBuyPage);
 router.post('/buy/:id',requireAuth,userController.handlepurchase)
 router.get("/report",requireAuth,userController.handlePurchaseReport)
+router.get("/profile",userController.profile)
 module.exports = router;

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Shop Report</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+    }
+
+    .main-container {
+      margin-left: 250px; /* adjust according to sidebar */
+      padding: 2rem;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 32px;
+      color: #333;
+    }
+
+    .table-container {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+    }
+
+    th, td {
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: #f9fafc;
+      font-weight: 600;
+      color: #555;
+    }
+
+    tr:hover {
+      background-color: #f4f7fb;
+    }
+
+    td {
+      color: #444;
+      font-size: 15px;
+    }
+
+    td:first-child {
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        margin-left: 0;
+        padding: 1rem;
+      }
+
+      table {
+        font-size: 14px;
+      }
+
+      th, td {
+        padding: 10px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/superadminhed') %>
+  <%- include('partials/superadminside') %>
+
+  <div class="main-container">
+    <h2>All Shop Report</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Sr No</th>
+            <th>Shop Name</th>
+            <th>Contact Person</th>
+            <th>Email</th>
+            <th>Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (shops && shops.length > 0) { %>
+            <% shops.forEach((shop, index) => { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><%= shop.shopName %></td>
+                <td><%= shop.contactPersonName %></td>
+                <td><%= shop.email %></td>
+                <td><%= shop.createdAt.toDateString() %></td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="5" style="text-align: center; color: #999; padding: 20px;">
+                No shops available
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

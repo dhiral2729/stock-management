@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Manage Shops</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #000000;
+      --primary-hover: #4338ca;
+      --gray-bg: #f9fafb;
+      --white: #ffffff;
+      --text-dark: #111827;
+      --text-light: #6b7280;
+      --border: #e5e7eb;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--gray-bg);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .layout {
+      display: flex;
+      flex: 1;
+    }
+
+    .sidebar {
+      width: 240px;
+      background-color: var(--white);
+      border-right: 1px solid var(--border);
+      padding: 1.5rem;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.03);
+    }
+
+    .content {
+      flex: 1;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .header-row h2 {
+      font-size: 2rem;
+      color: var(--text-dark);
+    }
+
+    .form-section {
+      background-color: var(--white);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      max-width: 600px;
+      margin: 0 auto 3rem auto;
+    }
+
+    .form-section h3 {
+      margin-bottom: 1.5rem;
+      color: var(--text-dark);
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      margin: 0.75rem 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+
+    label {
+      margin: 0.75rem 0;
+      color: var(--text-dark);
+      display: block;
+    }
+
+    button {
+      background-color: var(--primary);
+      color: var(--white);
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-right: 1rem;
+    }
+
+    button.edit {
+      background-color: #4caf50;
+    }
+
+    button.delete {
+      background-color: #ff6347;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    .card {
+      background-color: var(--white);
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+      margin-top: 3rem;
+      padding: 1rem 2rem;
+      width: 100%;
+      display: flex
+;
+    left: 235px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 0.7rem;
+    }
+
+    th, td {
+      padding: 1rem;
+      background-color: var(--white);
+      color: var(--text-dark);
+      font-size: 0.95rem;
+      text-align: left;
+    }
+
+    tr:hover td {
+      background-color: #f1f5f9;
+    }
+
+    .empty-message {
+      text-align: center;
+      color: var(--text-light);
+      padding: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/superadminhed') %>
+  <div class="layout">
+    <aside class="sidebar">
+      <%- include('partials/superadminside') %>
+    </aside>
+
+    <main class="content">
+      <div class="header-row">
+        <h2><span id="form-title">Add New Shop</span></h2>
+      </div>
+
+      <div class="form-section">
+        <form id="shop-form" method="POST" action="/superadmin/createshop">
+     
+          
+      
+          <label>Shop Name:</label>
+          <input type="text" name="shopName" id="shop-name" required />
+      
+          <label>Contact Person:</label>
+          <input type="text" name="contactPersonName" id="contact-person" required />
+      
+          <label>Email:</label>
+          <input type="email" name="email" id="shop-email" required />
+      
+          <label>Password:</label>
+          <input type="password" name="password" id="shop-password" required />
+      
+          <button type="submit" id="submit-btn">Create Shop</button>
+          <input type="hidden" name="_method" id="method-field" value="POST">
+          
+          <button type="button" onclick="resetForm()" style="display: none" id="cancel-btn">Cancel</button>
+        </form>
+      </div>
+
+      <div class="header-row">
+        <h2>All Shops</h2>
+      </div>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+                <th>Sr.No</th>
+              <th>Shop Name</th>
+              <th>Contact Person</th>
+              <th>Email</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (shops && shops.length > 0) { %>
+              <% shops.forEach((shop, index) => { %>
+                <tr>
+                  <td><%= index + 1 %></td>
+                  <td><%= shop.shopName %></td>
+                  <td><%= shop.contactPersonName %></td>
+                  <td><%= shop.email %></td>
+                  <td>
+                    <button type="button" class="edit" onclick="editShop('<%= shop._id %>', '<%= shop.shopName %>', '<%= shop.contactPersonName %>', '<%= shop.email %>')">Edit</button>
+
+                    <form action="/superadmin/delete/shop/<%= shop._id %>" method="POST" onsubmit="return confirm('Are you sure?')" style="display:inline-block;">
+                      <button type="submit" class="delete">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } else { %>
+              <tr>
+                <td colspan="5" class="empty-message">No shops available</td>
+              </tr>
+            <% } %>
+          </tbody>
+          
+        </table>
+      </div>
+    </main>
+  </div>
+  <script>
+    function editShop(id, name, contact, email) {
+      const form = document.getElementById('shop-form');
+      document.getElementById('shop-name').value = name;
+      document.getElementById('contact-person').value = contact;
+      document.getElementById('shop-email').value = email;
+  
+      // For update, password is optional (you can also hide the field if needed)
+      document.getElementById('shop-password').required = false;
+  
+      form.action = `/superadmin/update/shop/${id}`;
+      document.getElementById('method-field').value = 'PUT';
+      document.getElementById('submit-btn').textContent = 'Update Shop';
+      document.getElementById('cancel-btn').style.display = 'inline-block';
+      window.scrollTo({ top: form.offsetTop, behavior: 'smooth' });
+    }
+  
+    function resetForm() {
+      const form = document.getElementById('shop-form');
+      document.getElementById('shop-name').value = '';
+      document.getElementById('contact-person').value = '';
+      document.getElementById('shop-email').value = '';
+      document.getElementById('shop-password').value = '';
+      document.getElementById('shop-password').required = true;
+  
+      form.action = '/superadmin/createshop';
+      document.getElementById('method-field').value = 'POST';
+      document.getElementById('submit-btn').textContent = 'Create Shop';
+      document.getElementById('cancel-btn').style.display = 'none';
+    }
+  </script>
+  
+</body>
+</html>

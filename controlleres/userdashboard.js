@@ -136,6 +136,16 @@ const handlePurchaseReport = async (req, res) => {
     console.log(err);
   }
 };
+const profile=async(req,res)=>{
+  try{
+    const user=req.user;
+    res.render('userprofile',user);
+  }
+  catch(error){
+console.log(error);
+
+  }
+}
 
 module.exports = {
   userDashboard,
@@ -143,4 +153,5 @@ module.exports = {
   getBuyPage,
   handlepurchase,
   handlePurchaseReport,
+  profile
 };

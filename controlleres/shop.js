@@ -1,5 +1,6 @@
 const Shop = require('../models/shop');
 const bcrypt = require('bcrypt');
+const jwt=require("jsonwebtoken")
 
 exports.createShop = async (req, res) => {
   try {
@@ -24,7 +25,7 @@ exports.createShop = async (req, res) => {
     });
 
     await newShop.save();
-    res.status(201).json({ message: 'Shop created successfully', shop: newShop });
+    res.status(200).redirect('/superadmin/shop');
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error', error: error.message });
@@ -33,12 +34,15 @@ exports.createShop = async (req, res) => {
 
 exports.getAllShops = async (req, res) => {
   try {
+    let token = req.cookies.token;
+    token = jwt.verify(token, process.env.JWT_SECRET);
     const shops = await Shop.find().populate('superAdminId', 'email');
     if (!shops || shops.length === 0) {
       return res.status(404).json({ message: 'No shops found.' });
+   
     }
 
-    res.status(200).json({ shops });
+    res.render('mangeshop', { shops ,token});
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error', error: error.message });
@@ -57,14 +61,15 @@ exports.updateShop = async (req, res) => {
     if (!shop) {
       return res.status(404).json({ message: 'Shop not found.' });
     }
-
+    // console.log(shop);
+    
     const updatedShop = await Shop.findByIdAndUpdate(
       req.params.id,
       { shopName, contactPersonName, email },
       { new: true }
     );
 
-    res.status(200).json({ message: 'Shop updated successfully', shop: updatedShop });
+    res.status(200).redirect('/superadmin/shop');
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error updating shop', error: error.message });
@@ -79,9 +84,33 @@ exports.deleteShop = async (req, res) => {
     }
 
     await Shop.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: 'Shop deleted successfully' });
+    res.status(200).redirect('/superadmin/shop');
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error deleting shop', error: error.message });
   }
 };
+exports.shopReport = async (req, res) => {
+  try {
+    const shops = await Shop.find(); 
+    let token = req.cookies.token;
+    token = jwt.verify(token, process.env.JWT_SECRET);
+    res.render('superadminreport', {
+      shops,
+      token
+    });
+  } catch (error) {
+    console.error('Error fetching shop report:', error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+exports.profile=async(req,res)=>{
+  try{
+    const user=req.user;
+    res.render('profile',user);
+  }
+  catch(error){
+console.log(error);
+
+  }
+}

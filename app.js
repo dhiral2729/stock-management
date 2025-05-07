@@ -39,8 +39,8 @@ app.use("/admin",adminroutes);
 app.use("/admin",productroutes);
 app.use('/admin', stockRoutes);
 app.use("/user",userDashboard);
-app.use("/admin",shoproutes)
-app.use("/admin",shopusersroutes)
+app.use("/superadmin",shoproutes)
+app.use("/superadmin",shopusersroutes)
 app.use((req,res,next)=>{
     res.status(400).render("errorpage",{
         msg:"The page you are looking for does not exist"

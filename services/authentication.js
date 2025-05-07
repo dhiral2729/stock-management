@@ -2,22 +2,24 @@ const jwt = require('jsonwebtoken');
 
 const secreteKey = process.env.JWT_SECRET;
 
-function createTokenForUser(email, password,name) {
+function createTokenForUser(email, password,name,role) {
   const payload = {
   
     name,
     email,
-    password
+    password,
+    role
   };                                                                                                   
                                 
   const token = jwt.sign(payload, secreteKey);
   return token;
 }
-function createTokenForAdmin(email, password,name) {
+function createTokenForAdmin(email, password,name,role) {
   const payload = {
     email,
     name,
-    password
+    password,
+    role
   };
   const adminToken = jwt.sign(payload, secreteKey);
   return adminToken;
@@ -35,32 +37,32 @@ function validatetoken(adminToken ) {
   
   return payload;
 }
-function createTokenForShop(id,role,email) {
-  const payload = {
+// function createTokenForShop(id,role,email) {
+//   const payload = {
   
-   id,
-   role,
-   email
-  };                                                                                                   
+//    id,
+//    role,
+//    email
+//   };                                                                                                   
                                 
-  const token = jwt.sign(payload, secreteKey);
-  console.log(token);
+//   const token = jwt.sign(payload, secreteKey);
+//   console.log(token);
   
-  return token;
-}
-function validatetokenShop( shopToken) {
-  const payload = jwt.verify(shopToken, secreteKey);
-  // console.log(payload);
+//   return token;
+// }
+// function validatetokenShop( shopToken) {
+//   const payload = jwt.verify(shopToken, secreteKey);
+//   // console.log(payload);
   
-  return payload;
-}
+//   return payload;
+// }
 module.exports = {
   createTokenForUser,
   createTokenForAdmin,
-  createTokenForShop,
+  // createTokenForShop,
   validatetoken,
   validatetokenForUser,
-  validatetokenShop
+  // validatetokenShop
   
   
 };

@@ -117,6 +117,8 @@ const createUsers = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
+
+
 module.exports = {
   getAllUsers,
   editForm,
@@ -124,5 +126,6 @@ module.exports = {
   handleReport,
   viewProductHistory,
   createUsers,
+
 
 };

@@ -3,8 +3,9 @@ const router = express.Router();
 const shopcontroller=require("../controlleres/shop")
 router.post("/createshop",shopcontroller.createShop)
 router.get("/shop",shopcontroller.getAllShops)
-router.put("/update/shop/:id",shopcontroller.updateShop)
-router.delete("/delete/shop/:id",shopcontroller.deleteShop)
-
+router.post("/update/shop/:id",shopcontroller.updateShop)
+router.post("/delete/shop/:id",shopcontroller.deleteShop)
+router.get('/reports', shopcontroller.shopReport);
+router.get("/profile",shopcontroller.profile)
 
 module.exports = router;

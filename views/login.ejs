@@ -108,7 +108,11 @@
   </style>
 </head>
 <body>
-  
+  <script>
+    <% if (typeof error !== 'undefined' && error) { %>
+      alert("<%= error %>");
+    <% } %>
+  </script>
   <div class="signup-container">
     <h1>Login</h1>
     <form action="/login" method="POST">
@@ -137,6 +141,8 @@
     <p>New to the Tool? <a href="/signup">Register</a></p>
   </div>
 
+
+  
 
   </script>
 </body>

@@ -11,7 +11,7 @@
       rel="stylesheet"
     />
     <!-- Toastr CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" /> -->
 
 
     <style>
@@ -41,7 +41,7 @@
 
       /* for toast */
 
-      .toast-container {
+      /* .toast-container {
         position: fixed;
         top: 20px;
         right: 20px;
@@ -66,7 +66,7 @@
         10% { opacity: 1; transform: translateY(0); }
         90% { opacity: 1; }
         100% { opacity: 0; transform: translateY(-20px); }
-      }
+      } */
       /* end toast */
     </style>
 
@@ -134,23 +134,6 @@
   </body>
 
 
-  <script>
-    const toastContainer = document.getElementById('toast-container');
-    const flashSuccess = "<%= success && success.length > 0 ? success[0] : '' %>";
-    console.log("flashSuccess",flashSuccess);
-    const flashError = "<%= error && error.length > 0 ? error[0] : '' %>";
-    function showToast(message, type) {
-      if (!message) return;
-      const toast = document.createElement('div');
-      toast.classList.add('toast', `toast-${type}`);
-      toast.innerText = message;
-      toastContainer.appendChild(toast);
-      setTimeout(() => toast.remove(), 4000);
-    }
-  
-    if (flashSuccess) showToast(flashSuccess, 'success');
-    if (flashError) showToast(flashError, 'error');
-  </script>
   
   <!-- <script>
     $(document).ready(function () {

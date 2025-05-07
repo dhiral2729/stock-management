@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['shopadmin', 'user'],
+      enum: ['shopadmin', 'user','superadmin'],
       default: 'user',
     },
     isApproved: { type: Boolean, default: false }
