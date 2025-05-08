@@ -36,13 +36,12 @@ exports.getAllShops = async (req, res) => {
   try {
     let token = req.cookies.token;
     token = jwt.verify(token, process.env.JWT_SECRET);
-    const shops = await Shop.find().populate('superAdminId', 'email');
-    if (!shops || shops.length === 0) {
-      return res.status(404).json({ message: 'No shops found.' });
    
-    }
-
+    const shops = await Shop.find().populate('superAdminId', 'email'); 
     res.render('mangeshop', { shops ,token});
+    
+
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error', error: error.message });
