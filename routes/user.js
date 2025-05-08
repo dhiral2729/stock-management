@@ -28,6 +28,7 @@ router.get('/admin/dashboard', requireAuth, (req, res) => {
   // console.log(token)
   return res.render('admindashboard', { token });
 });
+router.get('/admin/profile',authController.shopadminprofile)
 router.get('/superadmin/dashboard', requireAuth, async(req, res) => {
   let token = req.cookies.token;
   token = jwt.verify(token, process.env.JWT_SECRET);
@@ -47,9 +48,6 @@ router.get('/superadmin/dashboard', requireAuth, async(req, res) => {
   category.map(()=>{
     categorycount++
   })
-
-
-
 
   return res.render('superadmindashboard', { token, count ,productcount,categorycount});
 });

@@ -97,9 +97,20 @@ const logout = (req, res) => {
     res.status(500).json({ message: 'Logout failed: ' });
   }
 };
+const shopadminprofile=async(req,res)=>{
+  try{
+    const user=req.user;
+    res.render('shopadminprofile',user);
+  }
+  catch(error){
+console.log(error);
+
+  }
+}
 module.exports = {
   handlesignup,
   loginUser,
   logout,
   loadHome,
+  shopadminprofile
 };

@@ -146,7 +146,6 @@ console.log(error);
 
   }
 }
-
 module.exports = {
   userDashboard,
   userStocks,

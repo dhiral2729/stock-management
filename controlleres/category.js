@@ -12,7 +12,7 @@ exports.getCategory = async (req, res) => {
   }
 };
 
-exports.addCategory = async (req, res) => {  //complated
+exports.addCategory = async (req, res) => {  
   // console.log(req.body);
   const { name } = req.body;
   try {
