@@ -97,7 +97,7 @@ const handlepurchase = async (req, res) => {
     const newPurchase = new Purchase({
       product: purchaseId,
       quantity,
-      buyer: currUser._id,
+      buyer: decoded._id,
       price: product.price * quantity,
     });
     // console.log(newPurchase);
@@ -121,7 +121,7 @@ const handlePurchaseReport = async (req, res) => {
     // console.log(currUser)
 
     // console.log(currUser)
-    const purchase = await Purchase.find({ buyer: currUser._id })
+    const purchase = await Purchase.find({ buyer: decoded._id })
 
       .populate('product')
       .populate('buyer')
