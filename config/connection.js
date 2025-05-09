@@ -3,7 +3,7 @@ const MongoUrl = process.env.MONGO_URI;
 
 const connectTomongodb = async (req,res) => {
   mongoose
-    .connect('mongodb://localhost:27017/sms')
+    .connect(MongoUrl)
     .then(() => console.log('mongo connected:'))
     .catch((err) => {
       console.log(err);

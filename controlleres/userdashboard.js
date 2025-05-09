@@ -97,7 +97,7 @@ const handlepurchase = async (req, res) => {
     const newPurchase = new Purchase({
       product: purchaseId,
       quantity,
-      buyer: decoded._id,
+      buyer: currUser._id,
       price: product.price * quantity,
     });
     // console.log(newPurchase);
@@ -113,15 +113,18 @@ const handlePurchaseReport = async (req, res) => {
   try {
     const token = req.cookies.token;
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+   const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
     // console.log(decoded);
     
 
-    const currUser = await User.findOne({ name: decoded.name });
+ const currUser = await User.findOne({ name: decoded.name });
+
     // console.log(currUser)
 
     // console.log(currUser)
-    const purchase = await Purchase.find({ buyer: decoded._id })
+   const purchase = await Purchase.find({ buyer: currUser._id }) 
+
 
       .populate('product')
       .populate('buyer')
@@ -130,7 +133,8 @@ const handlePurchaseReport = async (req, res) => {
     return res.render('allreport', {
       purchases: purchase,
       token: decoded,
-      username: decoded.name,
+      username:decoded.name,
+      
     });
   } catch (err) {
     console.log(err);
