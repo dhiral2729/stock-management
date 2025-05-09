@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
 const User=require("../models/user")
-const{validatetoken,validatetokenForUser}=require("../services/authentication")
+const{validatetoken,validatetokenForUser,validatetokenForShopUsers}=require("../services/authentication")
 const requireAuth = (req, res, next) => {
   const token = req.cookies.token;
+  // console.log(token);
+  
   if (!token) return res.redirect('/login');
 
   try {
@@ -45,11 +47,28 @@ function checkForAuthenticationCookieUser(userToken){
     return next();
   }
 }
+function checkForAuthenticationCookieShopUsers(shopUsersToken){
+return(req,res,next)=>{
+  const tokenvalue=req.cookies[shopUsersToken];
+  if(!tokenvalue){
+    return next();
+  }
+  try {
+    const shopPayload=validatetokenForShopUsers(tokenvalue);
+    req.user=shopPayload;
+  } catch (error) {
+     console.log(err);
+  }
+  return next()
+}
+}
 
 module.exports = {
   requireAuth,
    checkForAuthenticationCookie,
    checkForAuthenticationCookieUser,
+   checkForAuthenticationCookieShopUsers
+
   
 };
 

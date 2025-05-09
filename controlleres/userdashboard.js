@@ -112,6 +112,8 @@ const handlepurchase = async (req, res) => {
 const handlePurchaseReport = async (req, res) => {
   try {
     const token = req.cookies.token;
+    console.log(token);
+    
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     // console.log(decoded);
@@ -121,7 +123,7 @@ const handlePurchaseReport = async (req, res) => {
     // console.log(currUser)
 
     // console.log(currUser)
-    const purchase = await Purchase.find({ buyer: decoded._id })
+    const purchase = await Purchase.find({ buyer: currUser._id })
 
       .populate('product')
       .populate('buyer')
@@ -130,7 +132,7 @@ const handlePurchaseReport = async (req, res) => {
     return res.render('allreport', {
       purchases: purchase,
       token: decoded,
-      username: decoded.name,
+      username: currUser.name,
     });
   } catch (err) {
     console.log(err);

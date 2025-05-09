@@ -34,7 +34,7 @@
               <td><%= purchase.quantity %></td>
               <td>₹<%= purchase.price %></td>
               <td><%= new Date(purchase.purchasedAt).toLocaleString() %></td>
-              <td><%= purchase.buyer ? purchase.buyer.name : 'N/A' %></td>
+             <td><%= purchase.buyer ? purchase.buyer.name : 'N/A' %></td>
             </tr>
           <% }) %>
           

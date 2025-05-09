@@ -25,7 +25,24 @@ function createTokenForAdmin(email, password,name) {
   const adminToken = jwt.sign(payload, secreteKey);
   return adminToken;
 }
+function creatTokenForShopUsers(name,email,role,shopId){
+  const payload={
+    name,
+    email,
+    role,
+    shopId,
 
+  }
+  // console.log(payload);
+  
+  const shopusertoken=jwt.sign(payload,secreteKey);
+  return shopusertoken;
+}
+function validatetokenForShopUsers(shopusertoken ) {
+  const payload = jwt.verify(shopusertoken, secreteKey);
+  // console.log(payload)
+  return payload;
+}
 function validatetokenForUser(userToken ) {
   const payload = jwt.verify(userToken, secreteKey);
   // console.log(payload)
@@ -42,9 +59,10 @@ function validatetoken(adminToken ) {
 module.exports = {
   createTokenForUser,
   createTokenForAdmin,
-
+  creatTokenForShopUsers,
   validatetoken,
   validatetokenForUser,
+  validatetokenForShopUsers
 
   
   

@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const {
   createTokenForAdmin,
   createTokenForUser,
+  creatTokenForShopUsers
 } = require('../services/authentication');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
@@ -62,6 +63,8 @@ const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
+
+    
     if (!user)
       return res.render('login', { error: 'User not found, please sign up' });
 
@@ -74,7 +77,7 @@ const loginUser = async (req, res) => {
       res.cookie('token', token);
       return res.redirect('/superadmin/dashboard');
     } else if (user.role === 'shopadmin') {
-      token = createTokenForAdmin(user.email, user.password, user.name);
+      token = creatTokenForShopUsers(user.name,user.email,user.role,user.shopId);
       res.cookie('token', token);
       return res.redirect('/admin/dashboard');
     } else if (user.role === 'user') {

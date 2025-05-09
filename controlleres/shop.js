@@ -1,4 +1,5 @@
 const Shop = require('../models/shop');
+const User=require("../models/user")
 const bcrypt = require('bcrypt');
 const jwt=require("jsonwebtoken")
 
@@ -23,9 +24,18 @@ exports.createShop = async (req, res) => {
       email,
       password: hashpassword,
     });
+    await User.create({
+      name:contactPersonName,
+      email,
+      password:hashpassword,
+      role:"user",
+      shopId: newShop._id,
+      isApproved:true
+
+    })
 
     await newShop.save();
-    res.status(200).redirect('/superadmin/shop');
+    res.status(200).redirect("/superadmin/shop")
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error', error: error.message });
@@ -34,19 +44,19 @@ exports.createShop = async (req, res) => {
 
 exports.getAllShops = async (req, res) => {
   try {
-    let token = req.cookies.token;
-    token = jwt.verify(token, process.env.JWT_SECRET);
-   
-    const shops = await Shop.find().populate('superAdminId', 'email'); 
-    res.render('mangeshop', { shops ,token});
-    
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ message: 'Unauthorized' });
 
-    
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const shops = await Shop.find().populate('superAdminId', 'email');
+    res.render('mangeshop', { shops, token: decoded });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
 
 exports.updateShop = async (req, res) => {
   try {
@@ -113,3 +123,36 @@ console.log(error);
 
   }
 }
+exports.createShopUsers = async (req, res) => {
+  try {
+    // console.log(shopadmin);
+    
+    const shopadmin = req.user; 
+
+    if (!shopadmin || shopadmin.role !== 'shopadmin') {
+      return res.status(403).json({ msg: 'Only shopadmin can add users' });
+    }
+
+    const { name, email, password } = req.body;
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ msg: 'Email already exists' });
+    }
+
+    const hashpassword = await bcrypt.hash(password, 10);
+    await User.create({
+      name,
+      email,
+      password: hashpassword,
+      role: 'user',
+      shopId: shopadmin.shopId, 
+      isApproved: true
+    });
+
+    res.status(200).json({ msg: 'Success' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: 'Server error', error: error.message });
+  }
+};
+
