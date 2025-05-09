@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema(
       enum: ['shopadmin', 'user','superadmin'],
       default: 'user',
     },
+    shopId:{
+      type:String,
+      ref:"shop"
+    },
     isApproved: { type: Boolean, default: false }
   },
   {

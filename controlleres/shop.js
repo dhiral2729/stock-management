@@ -34,19 +34,19 @@ exports.createShop = async (req, res) => {
 
 exports.getAllShops = async (req, res) => {
   try {
-    let token = req.cookies.token;
-    token = jwt.verify(token, process.env.JWT_SECRET);
-   
-    const shops = await Shop.find().populate('superAdminId', 'email'); 
-    res.render('mangeshop', { shops ,token});
-    
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ message: 'Unauthorized' });
 
-    
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const shops = await Shop.find().populate('superAdminId', 'email');
+    res.render('mangeshop', { shops, token: decoded });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
 
 exports.updateShop = async (req, res) => {
   try {
