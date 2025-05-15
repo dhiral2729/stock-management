@@ -10,11 +10,6 @@ router.post("/delete/shop/:id",shopcontroller.deleteShop)
 router.get('/reports', shopcontroller.shopReport);
 router.get("/profile",shopcontroller.profile)
 router.post("/shopusers",checkForAuthenticationCookieShopUsers,shopcontroller.createShopUsers)
-// router.get(
-//   "/shopusers",
-//   checkForAuthenticationCookieShopUsers("shopusertoken"),
-//   shopcontroller.getUserShopAdmin
-// );
 
 
 module.exports = router;

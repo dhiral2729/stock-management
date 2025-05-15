@@ -112,7 +112,7 @@ const handlepurchase = async (req, res) => {
 const handlePurchaseReport = async (req, res) => {
   try {
     const token = req.cookies.token;
-    console.log(token);
+    // console.log(token);
     
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
