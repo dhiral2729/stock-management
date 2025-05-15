@@ -44,4 +44,6 @@ app.use((req,res,next)=>{
         msg:"The page you are looking for does not exist"
     })
 })
-app.listen(port,console.log("http://localhost:5000"))
+app.listen(port, () => {
+  console.log(` Server is running on port ${port}`);
+});
