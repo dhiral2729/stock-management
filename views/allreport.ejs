@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
-    <%- include('partials/adminheader') %>
-     <%- include('partials/usersidebar') %>
+    <%- include('partials/header') %>
+  <%- include('partials/usersidebar') %>
 
     <div class="container" style="margin-left: 268px">
         <!-- <h2><%= username %>'s Purchase History</h2>
@@ -34,8 +34,8 @@
               <td><%= purchase.quantity %></td>
               <td>₹<%= purchase.price %></td>
               <td><%= new Date(purchase.purchasedAt).toLocaleString() %></td>
-             <td><%= purchase.buyer ? purchase.buyer.name : 'N/A' %></td>
-            </tr>
+              <td><%= purchase.buyer ? purchase.buyer.name : 'N/A' %></td>
+             </tr>
           <% }) %>
           
         </tbody>

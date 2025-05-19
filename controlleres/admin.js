@@ -37,7 +37,11 @@ deleteUser = async (req, res) => {
 const handleReport = async (req, res) => {
   try {
     const token = req.cookies.token;
+    // console.log(token);
+    
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+ 
+    
     const allPurchase = await Purchase.find({})
       .populate('product')
       .populate('buyer')
@@ -117,8 +121,6 @@ const createUsers = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
-
-
 module.exports = {
   getAllUsers,
   editForm,
@@ -126,6 +128,5 @@ module.exports = {
   handleReport,
   viewProductHistory,
   createUsers,
-
 
 };

@@ -45,6 +45,8 @@ exports.createShop = async (req, res) => {
 exports.getAllShops = async (req, res) => {
   try {
     const token = req.cookies.token;
+    console.log(token);
+    
     if (!token) return res.status(401).json({ message: 'Unauthorized' });
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -120,7 +122,6 @@ exports.profile=async(req,res)=>{
   }
   catch(error){
 console.log(error);
-
   }
 }
 exports.createShopUsers = async (req, res) => {

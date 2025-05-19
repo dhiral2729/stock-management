@@ -1,6 +1,6 @@
 const Product = require('../models/product');
 const Stock = require('../models/stock');
-const category = require('../models/category');
+// const category = require('../models/category');
 const Purchase = require('../models/purchase');
 const jwt=require("jsonwebtoken")
 const Category = require('../models/category');
@@ -58,6 +58,8 @@ const getBuyPage = async (req, res) => {
 
     const stock = await Stock.findOne({ product: productId });
     const category = await Category.find({});
+    // console.log(category);
+    
     // console.log(stock);
 
     if (!product) {
@@ -97,7 +99,7 @@ const handlepurchase = async (req, res) => {
     const newPurchase = new Purchase({
       product: purchaseId,
       quantity,
-      buyer: decoded._id,
+      buyer:currUser._id,
       price: product.price * quantity,
     });
     // console.log(newPurchase);
@@ -113,7 +115,6 @@ const handlePurchaseReport = async (req, res) => {
   try {
     const token = req.cookies.token;
     // console.log(token);
-    
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     // console.log(decoded);
@@ -132,7 +133,7 @@ const handlePurchaseReport = async (req, res) => {
     return res.render('allreport', {
       purchases: purchase,
       token: decoded,
-      username: currUser.name,
+      username: decoded.name,
     });
   } catch (err) {
     console.log(err);
